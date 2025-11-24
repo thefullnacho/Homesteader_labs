@@ -312,6 +312,27 @@ const PaymentModal = ({ isOpen, onClose, total }) => {
     );
 };
 
+// 4.5 LEGAL MODAL
+const LegalModal = ({ title, content, isOpen, onClose }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={onClose}>
+            <div className="bg-stone-900 border border-stone-500 text-stone-300 p-8 max-w-2xl w-full font-mono relative shadow-2xl" onClick={e => e.stopPropagation()}>
+                <button onClick={onClose} className="absolute top-4 right-4 text-stone-500 hover:text-white"><X /></button>
+                <h2 className="text-xl font-bold uppercase mb-6 text-white border-b border-stone-700 pb-2">{title}</h2>
+                <div className="text-xs leading-relaxed whitespace-pre-wrap font-mono">
+                    {content}
+                </div>
+                <div className="mt-8 pt-4 border-t border-stone-800 text-right">
+                    <button onClick={onClose} className="bg-stone-800 hover:bg-stone-700 text-white px-4 py-2 text-xs uppercase font-bold">
+                        [ ACKNOWLEDGE ]
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // 5. ORGANIC VISUALIZER
 const BioMonitor = () => {
     const canvasRef = useRef(null);
@@ -941,7 +962,11 @@ const App = () => {
     const [view, setView] = useState('HOME');
     const [cart, setCart] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [booting, setBooting] = useState(true);
+
+    // Boot Persistence
+    const [booting, setBooting] = useState(() => {
+        return !localStorage.getItem('homesteader_booted');
+    });
 
     // New States
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
@@ -950,6 +975,9 @@ const App = () => {
     const [checkoutTotal, setCheckoutTotal] = useState(0);
     const [products, setProducts] = useState(INITIAL_PRODUCTS);
     const [secretInput, setSecretInput] = useState('');
+
+    // Legal Modal State
+    const [legalModal, setLegalModal] = useState({ isOpen: false, title: '', content: '' });
 
     // Archive State (persisted)
     const [archive, setArchive] = useState(() => {
@@ -1031,7 +1059,7 @@ const App = () => {
 
     return (
         <div className="min-h-screen bg-[#e8e6e1] text-stone-900 font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden">
-            {booting && <BootSequence onComplete={() => setBooting(false)} />}
+            {booting && <BootSequence onComplete={() => { setBooting(false); localStorage.setItem('homesteader_booted', 'true'); }} />}
 
             <BioMonitor />
 
@@ -1053,6 +1081,13 @@ const App = () => {
             />
 
             <PaymentModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} total={checkoutTotal} />
+
+            <LegalModal
+                isOpen={legalModal.isOpen}
+                onClose={() => setLegalModal(prev => ({ ...prev, isOpen: false }))}
+                title={legalModal.title}
+                content={legalModal.content}
+            />
 
             <Navigation setView={handleNav} cartCount={cart.length} currentView={view} />
 
@@ -1158,9 +1193,36 @@ const App = () => {
                     <div>
                         <h5 className="text-white font-bold mb-4 uppercase">Protocol</h5>
                         <ul className="space-y-2">
-                            <li className="hover:text-white cursor-pointer">TERMS_OF_FABRICATION</li>
-                            <li className="hover:text-white cursor-pointer">WARRANTY (VOID)</li>
-                            <li className="hover:text-white cursor-pointer">PRIVACY_HASH</li>
+                            <li
+                                onClick={() => setLegalModal({
+                                    isOpen: true,
+                                    title: 'TERMS_OF_FABRICATION',
+                                    content: '>> AGREEMENT PROTOCOL V.1.0\n\n1. RISK ACKNOWLEDGMENT\nBy accessing this terminal and utilizing Homesteader Labs fabrication files, you acknowledge that all hardware is experimental. We are not responsible for structural failure, limb loss, or voided insurance policies.\n\n2. MODIFICATION\nYou are encouraged to modify, hack, and improve all designs. Closed systems are dead systems.\n\n3. LIABILITY\nHomesteader Labs exists in the gray zones. If you build it, you own the consequences.'
+                                })}
+                                className="hover:text-white cursor-pointer"
+                            >
+                                TERMS_OF_FABRICATION
+                            </li>
+                            <li
+                                onClick={() => setLegalModal({
+                                    isOpen: true,
+                                    title: 'WARRANTY (VOID)',
+                                    content: '>> WARRANTY STATUS: VOID\n\nAll warranties were voided the moment you decided to take production into your own hands.\n\nThere is no customer support. There is only the community and the documentation.\n\nIf it breaks, fix it. If it doesn\'t work, iterate.'
+                                })}
+                                className="hover:text-white cursor-pointer"
+                            >
+                                WARRANTY (VOID)
+                            </li>
+                            <li
+                                onClick={() => setLegalModal({
+                                    isOpen: true,
+                                    title: 'PRIVACY_HASH',
+                                    content: '>> PRIVACY PROTOCOL\n\nWE DO NOT TRACK YOU.\nTHE NETWORK DOES.\n\nHomesteader Labs stores no cookies other than essential session data (cart, boot state). We do not sell your data because we do not collect it.\n\nStay safe out there.'
+                                })}
+                                className="hover:text-white cursor-pointer"
+                            >
+                                PRIVACY_HASH
+                            </li>
                         </ul>
                     </div>
                     <div className="border border-stone-700 p-4">
