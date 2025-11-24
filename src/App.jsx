@@ -245,6 +245,9 @@ const BootSequence = ({ onComplete }) => {
     ];
 
     useEffect(() => {
+        // Persist boot state immediately on mount so refreshes skip it
+        localStorage.setItem('homesteader_booted', 'true');
+
         let timeouts = [];
         bootLines.forEach((line) => {
             const timeout = setTimeout(() => {
@@ -1059,7 +1062,7 @@ const App = () => {
 
     return (
         <div className="min-h-screen bg-[#e8e6e1] text-stone-900 font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden">
-            {booting && <BootSequence onComplete={() => { setBooting(false); localStorage.setItem('homesteader_booted', 'true'); }} />}
+            {booting && <BootSequence onComplete={() => setBooting(false)} />}
 
             <BioMonitor />
 
@@ -1082,12 +1085,7 @@ const App = () => {
 
             <PaymentModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} total={checkoutTotal} />
 
-            <LegalModal
-                isOpen={legalModal.isOpen}
-                onClose={() => setLegalModal(prev => ({ ...prev, isOpen: false }))}
-                title={legalModal.title}
-                content={legalModal.content}
-            />
+
 
             <Navigation setView={handleNav} cartCount={cart.length} currentView={view} />
 
@@ -1237,6 +1235,13 @@ const App = () => {
                     Â© 2024 Homesteader Labs // Built for the long haul
                 </div>
             </footer>
+
+            <LegalModal
+                isOpen={legalModal.isOpen}
+                onClose={() => setLegalModal(prev => ({ ...prev, isOpen: false }))}
+                title={legalModal.title}
+                content={legalModal.content}
+            />
         </div>
     );
 };
