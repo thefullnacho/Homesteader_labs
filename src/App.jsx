@@ -413,17 +413,13 @@ const PreviewScene = ({ materialType, uploadedGeometry }) => {
         camera.position.z = 5;
 
         // Renderer
-        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         rendererRef.current = renderer;
 
-        // DOWNSCALE FOR ECO-BRUTALIST AESTHETIC
-        const scaleFactor = 0.25;
+        // FULL RESOLUTION FOR POINT CLOUD
         const width = mountRef.current.clientWidth;
         const height = mountRef.current.clientHeight;
-        renderer.setSize(width * scaleFactor, height * scaleFactor, false);
-        renderer.domElement.style.width = "100%";
-        renderer.domElement.style.height = "100%";
-        renderer.domElement.style.imageRendering = "pixelated";
+        renderer.setSize(width, height);
 
         mountRef.current.appendChild(renderer.domElement);
 
@@ -450,8 +446,7 @@ const PreviewScene = ({ materialType, uploadedGeometry }) => {
             const w = mountRef.current.clientWidth;
             const h = mountRef.current.clientHeight;
 
-            // Maintain low-res aspect
-            renderer.setSize(w * scaleFactor, h * scaleFactor, false);
+            renderer.setSize(w, h);
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
         };
@@ -505,18 +500,16 @@ const PreviewScene = ({ materialType, uploadedGeometry }) => {
         if (materialType === 'PLA') color = 0x166534;
         if (materialType === 'PETG') color = 0x3b82f6;
 
-        const material = new THREE.MeshStandardMaterial({
+        // POINT CLOUD MATERIAL
+        const material = new THREE.PointsMaterial({
             color: color,
-            wireframe: true,
-            roughness: 0.8,
-            metalness: 0.2
+            size: 0.05,
+            sizeAttenuation: true
         });
 
-        const mesh = new THREE.Mesh(geometry, material);
+        const mesh = new THREE.Points(geometry, material);
 
-        // Apply scale to mesh instead of geometry to preserve original data if needed, 
-        // but scaling geometry is safer for lighting/normals in this simple viewer.
-        // Actually, scaling the mesh is more standard.
+        // Apply scale to mesh
         if (uploadedGeometry) {
             mesh.scale.set(scale, scale, scale);
         }
