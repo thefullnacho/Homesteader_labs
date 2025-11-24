@@ -489,11 +489,21 @@ const PreviewScene = ({ materialType, uploadedGeometry }) => {
             geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
         }
 
+        // AUTO-SCALE MESH
+        geometry.computeBoundingBox();
+        const size = new THREE.Vector3();
+        geometry.boundingBox.getSize(size);
+        const maxDim = Math.max(size.x, size.y, size.z);
+
+        // Target size is 2.5 units (fits well with camera at z=5)
+        const targetSize = 2.5;
+        const scale = targetSize / maxDim;
+
         // Determine Color
         let color = 0x292524;
         if (materialType === 'RESIN') color = 0xd97706;
         if (materialType === 'PLA') color = 0x166534;
-        if (materialType === 'PETG') color = 0x3b82f6; // Added PETG color for completeness
+        if (materialType === 'PETG') color = 0x3b82f6;
 
         const material = new THREE.MeshStandardMaterial({
             color: color,
@@ -503,6 +513,14 @@ const PreviewScene = ({ materialType, uploadedGeometry }) => {
         });
 
         const mesh = new THREE.Mesh(geometry, material);
+
+        // Apply scale to mesh instead of geometry to preserve original data if needed, 
+        // but scaling geometry is safer for lighting/normals in this simple viewer.
+        // Actually, scaling the mesh is more standard.
+        if (uploadedGeometry) {
+            mesh.scale.set(scale, scale, scale);
+        }
+
         meshRef.current = mesh;
         sceneRef.current.add(mesh);
 
