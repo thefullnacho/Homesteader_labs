@@ -1,0 +1,17 @@
+{
+    "name": "Homesteader Labs Terminal",
+    "short_name": "HL_TERM",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0c0c0c",
+    "theme_color": "#0c0c0c",
+    "description": "Meshtastic BBS & Fabrication Terminal",
+    "icons": [
+        {
+            "src": "/vite.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Activity, Zap, CheckCircle, Wind, Lock, Unlock, AlertTriangle, Save } from 'lucide-react';
 import * as THREE from 'three';
+import MeshtasticTerminal from './components/MeshtasticTerminal';
 
 // --- UTILS: STL PARSER ---
 const parseSTL = (buffer) => {
@@ -562,7 +563,7 @@ const Navigation = ({ setView, cartCount, currentView }) => (
             </div>
 
             <div className="hidden md:flex gap-8 text-sm">
-                {['SHOP', 'ARCHIVE', 'FABRICATION'].map((item) => (
+                {['SHOP', 'ARCHIVE', 'FABRICATION', 'COMMS'].map((item) => (
                     <button
                         key={item}
                         onClick={() => setView(item)}
@@ -582,7 +583,7 @@ const Navigation = ({ setView, cartCount, currentView }) => (
             </button>
         </div>
         <div className="md:hidden flex justify-around border-t border-stone-900 py-2 bg-stone-200 text-xs">
-            {['SHOP', 'ARCHIVE', 'FABRICATION'].map((item) => (
+            {['SHOP', 'ARCHIVE', 'FABRICATION', 'COMMS'].map((item) => (
                 <button
                     key={item}
                     onClick={() => setView(item)}
@@ -1162,6 +1163,8 @@ const App = () => {
                 {view === 'ARCHIVE' && <Archive posts={archive} />}
 
                 {view === 'FABRICATION' && <FabWizard addToCart={addToCart} />}
+
+                {view === 'COMMS' && <MeshtasticTerminal />}
             </main>
 
             <CartDrawer
