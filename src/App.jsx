@@ -748,17 +748,51 @@ const FabWizard = ({ addToCart }) => {
                                     <p className="text-xs text-stone-400 mb-1">USD</p>
                                 </div>
                                 <button
-                                    onClick={() => addToCart({
-                                        id: `FAB-${Math.floor(Math.random() * 1000)}`,
-                                        name: `CUST_PART: ${file?.name || 'UNTITLED'}`,
-                                        price: parseFloat(getPrice()),
-                                        category: 'CUSTOM',
-                                        specs: [material, 'CUSTOM_FAB']
-                                    })}
+                                    onClick={async () => {
+                                        if (!file) return;
+                                        try {
+                                            const arrayBuffer = await file.arrayBuffer();
+                                            const bytes = new Uint8Array(arrayBuffer);
+                                            let binary = '';
+                                            for (let i = 0; i < bytes.length; i++) {
+                                                binary += String.fromCharCode(bytes[i]);
+                                            }
+                                            const base64 = btoa(binary);
+
+                                            const response = await fetch('/api/upload-stl.js', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    file: base64,
+                                                    filename: file.name || 'untitled.stl',
+                                                    volume
+                                                })
+                                            });
+
+                                            if (!response.ok) {
+                                                console.error('Upload failed', await response.text());
+                                                return;
+                                            }
+
+                                            const { url, volume: serverVolume, price } = await response.json();
+                                            const numericPrice = parseFloat(price);
+
+                                            addToCart({
+                                                id: 'CUST_PART',
+                                                name: `Printed ${file.name || 'UNTITLED'} (${serverVolume}cm³)`,
+                                                price: numericPrice,
+                                                category: 'CUSTOM',
+                                                description: `STL: ${url}`,
+                                                specs: [material, 'CUSTOM_FAB']
+                                            });
+                                        } catch (err) {
+                                            console.error('Confirm print order error', err);
+                                        }
+                                    }}
                                     className="w-full bg-stone-900 text-white font-bold py-3 hover:bg-stone-700 hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center gap-2 text-sm"
                                 >
                                     <Terminal size={14} />
-                                    [ COMPILE_ORDER ]
+                                    [ CONFIRM_PRINT_ORDER ]
                                 </button>
                             </div>
                         </div>

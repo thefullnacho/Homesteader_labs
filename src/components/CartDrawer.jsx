@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Terminal, Wind, X, Zap } from 'lucide-react';
+import { loadStripe } from '@stripe/stripe-js';
 
 const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
     const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -12,34 +13,35 @@ const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
     if (!isOpen) return null;
 
     const handleSecureCheckout = async () => {
-        if (!cart.length) return;
+        if (cart.length === 0) return;
+
         setIsCheckingOut(true);
         try {
             const response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    items: cart.map((item) => ({
-                        id: item.id,
-                        quantity: 1,
-                    })),
+                    cart, // ← CHANGED: Send full cart array (w/ id, name, price, desc for CUST_PART)
+                    customer_email: undefined // ← OPTIONAL: Pull from form/state (e.g., email input)
                 }),
             });
 
             if (!response.ok) {
-                console.error('Failed to create checkout session', await response.text());
-                setIsCheckingOut(false);
-                return;
+                throw new Error('Checkout failed');
             }
 
-            const session = await response.json();
-            if (session.url) {
-                window.location.href = session.url;
-            } else {
-                console.error('No session URL received');
-            }
-        } catch (err) {
-            console.error('Secure checkout error', err);
+            const { sessionId } = await response.json(); // ← CHANGED: Expect { sessionId } not { url }
+
+            // Stripe.js redirect (loads in new tab/overlay—your brutalist overlay? Swap to <StripeElements> if embedded)
+            const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); // ← Ensure this is loaded (head script or import)
+            await stripe.redirectToCheckout({ sessionId }); // ← NEW: Client-side redirect w/ sessionId
+
+            // Optional: Clear cart on success (webhook confirms later for prod)
+            // setCart([]);
+
+        } catch (error) {
+            console.error('Checkout error:', error);
+            // Brutalist toast? addLog('ERR: CHECKOUT_FAILED');
         } finally {
             setIsCheckingOut(false);
         }
