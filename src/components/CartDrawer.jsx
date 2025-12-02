@@ -1,9 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { Terminal, Wind, X, Zap } from 'lucide-react';
-import { loadStripe } from '@stripe/stripe-js';
-
-// Reuse existing PUBLISHABLE key from env
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
     const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -19,22 +15,15 @@ const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
         if (!cart.length) return;
         setIsCheckingOut(true);
         try {
-            const stripe = await stripePromise;
-            if (!stripe) {
-                console.error('Stripe failed to initialize');
-                setIsCheckingOut(false);
-                return;
-            }
-
-            const response = await fetch('/api/create-checkout-session.js', {
+            const response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     items: cart.map((item) => ({
                         id: item.id,
-                        quantity: 1
-                    }))
-                })
+                        quantity: 1,
+                    })),
+                }),
             });
 
             if (!response.ok) {
@@ -44,9 +33,10 @@ const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
             }
 
             const session = await response.json();
-            const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
-            if (error) {
-                console.error('Stripe redirect error', error);
+            if (session.url) {
+                window.location.href = session.url;
+            } else {
+                console.error('No session URL received');
             }
         } catch (err) {
             console.error('Secure checkout error', err);
