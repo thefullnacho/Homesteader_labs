@@ -43,13 +43,6 @@ const parseSTL = (buffer) => {
 };
 
 // --- DATA ---
-const INITIAL_PRODUCTS = [
-    { id: 'WLK-MN-PRO', name: 'WALKING MAN PRO', price: 1250.00, category: 'HARDWARE', description: 'High-torque exoskeleton assistance module. Industrial grade.', specs: ['TI_ALLOY', '24V_SYS', 'IP67_RATED'], image: 'pro' },
-    { id: 'WLK-MN-LIFE', name: 'WALKING MAN LIFE', price: 850.00, category: 'HARDWARE', description: 'Daily driver assistance unit. Lightweight composite frame.', specs: ['C_FIBER', '12V_SYS', 'MODULAR_V2'], image: 'life' },
-    { id: 'STL-GRIP-V4', name: 'MODULE: GRIP V4', price: 25.00, category: 'DIGITAL', description: 'Source files for the V4 universal grip attachment.', specs: ['FMT_STL', 'SUP_FREE', 'TOL_HIGH'], image: 'stl' },
-    { id: 'STL-TRD-HVY', name: 'MODULE: TREAD HVY', price: 30.00, category: 'DIGITAL', description: 'Heavy duty traction pad replacement patterns.', specs: ['FMT_STL', 'OBJ_INC', 'VASE_MODE'], image: 'stl' }
-];
-
 const SECRET_PRODUCT = {
     id: 'WLK-MN-EXE',
     name: 'WALKING MAN SOURCE',
@@ -977,7 +970,7 @@ const App = () => {
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
     const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false);
     const [checkoutTotal, setCheckoutTotal] = useState(0);
-    const [products, setProducts] = useState(INITIAL_PRODUCTS);
+    const [products, setProducts] = useState([]);
     const [secretInput, setSecretInput] = useState('');
 
     // Legal Modal State
@@ -1004,6 +997,25 @@ const App = () => {
     useEffect(() => {
         const savedCart = localStorage.getItem('homesteader_cart');
         if (savedCart) setCart(JSON.parse(savedCart));
+    }, []);
+
+    // Load Products from JSON
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('/data/products.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch products: ${response.status}`);
+                }
+                const data = await response.json();
+                setProducts(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.log('Error loading /data/products.json', error);
+                setProducts([]);
+            }
+        };
+
+        fetchProducts();
     }, []);
 
     // Save Cart
