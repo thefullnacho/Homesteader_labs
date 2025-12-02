@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { file, filename, volume } = req.body;
+    const { file, filename, volume, material } = req.body;
     if (!file || !volume) {
       return res.status(400).json({ error: 'Missing file or volume' });
     }
@@ -25,7 +25,12 @@ export default async function handler(req, res) {
       access: 'public',
     });
 
-    const price = (volume * 0.10 + 5).toFixed(2);
+    // PRICING: Match UI formula (baseRate 0.85 * materialMult + 15 setup)
+    const baseRate = 0.85; // $ per cm³
+    const materialMult = material === 'RESIN' ? 2.0 : material === 'PETG' ? 1.5 : 1.0; // PLA default
+    const setupFee = 15.00;
+    const numericVolume = parseFloat(volume);
+    const price = ((numericVolume * baseRate * materialMult) + setupFee).toFixed(2);
 
     res.status(200).json({
       url: blob.url, // New unique URL

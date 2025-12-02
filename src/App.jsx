@@ -13,6 +13,7 @@ const parseSTL = (buffer) => {
 
     const vertices = [];
     let volume = 0;
+    let sampleVert1 = null;
 
     for (let i = 0; i < triangleCount; i++) {
         offset += 12; // Skip Normal
@@ -22,6 +23,8 @@ const parseSTL = (buffer) => {
         offset += 12;
         const p3 = { x: view.getFloat32(offset, true), y: view.getFloat32(offset + 4, true), z: view.getFloat32(offset + 8, true) };
         offset += 12;
+
+        if (i === 0) sampleVert1 = p1; // Capture first vertex for debugging
 
         vertices.push(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z);
 
@@ -36,6 +39,8 @@ const parseSTL = (buffer) => {
         volume += (1.0 / 6.0) * (-v321 + v231 + v312 - v132 - v213 + v123);
         offset += 2; // Attribute byte count
     }
+
+    console.log('STL Debug:', { triangleCount, sampleVert1, rawVolume: volume, finalVolume: Math.abs(volume) / 1000 });
 
     return {
         vertices: new Float32Array(vertices),
@@ -609,7 +614,9 @@ const FabWizard = ({ addToCart }) => {
         const materialMult = material === 'RESIN' ? 2.0 : material === 'PETG' ? 1.5 : 1.0;
         const setupFee = 15.00;
         const price = (volume * baseRate * materialMult) + setupFee;
-        return isNaN(price) ? "0.00" : price.toFixed(2);
+        const quotedPrice = isNaN(price) ? "0.00" : price.toFixed(2);
+        console.log('Quote Calc:', { volume, baseRate, materialMult, setupFee, calculatedPrice: price, quotedPrice });
+        return quotedPrice;
     };
 
     const getTime = () => {
@@ -765,7 +772,8 @@ const FabWizard = ({ addToCart }) => {
                                                 body: JSON.stringify({
                                                     file: base64,
                                                     filename: file.name || 'untitled.stl',
-                                                    volume
+                                                    volume,
+                                                    material // ← NEW: Pass material to sync pricing
                                                 })
                                             });
 
@@ -774,16 +782,18 @@ const FabWizard = ({ addToCart }) => {
                                                 return;
                                             }
 
-                                            const { url, volume: serverVolume, price } = await response.json();
+                                            const { url, volume: serverVolume, price, filename: uniqueFilename } = await response.json();
                                             const numericPrice = parseFloat(price);
+
+                                            console.log('Cart Add:', { volume, material, price: numericPrice }); // Verify
 
                                             addToCart({
                                                 id: 'CUST_PART',
-                                                name: `Printed ${file.name || 'UNTITLED'} (${serverVolume}cm³)`,
-                                                price: numericPrice,
+                                                name: `Printed ${file.name || 'UNTITLED'} (${serverVolume}cm³, ${material})`,
+                                                price: numericPrice, // Synced from API (matches UI quote)
                                                 category: 'CUSTOM',
-                                                description: `STL: ${url}`,
-                                                specs: [material, 'CUSTOM_FAB']
+                                                description: `STL: ${url} (Material: ${material})`,
+                                                specs: [material.toUpperCase(), 'CUSTOM_FAB']
                                             });
                                         } catch (err) {
                                             console.error('Confirm print order error', err);
