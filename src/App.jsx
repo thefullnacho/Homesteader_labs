@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Activity, Zap, CheckCircle, Wind, Lock, Unlock, AlertTriangle, Save } from 'lucide-react';
 import * as THREE from 'three';
 import MeshtasticTerminal from './components/MeshtasticTerminal';
+import CartDrawer from './components/CartDrawer';
 
 // --- UTILS: STL PARSER ---
 const parseSTL = (buffer) => {
@@ -265,45 +266,6 @@ const BootSequence = ({ onComplete }) => {
                     </div>
                 ))}
                 <div ref={bottomRef} className="animate-pulse">_</div>
-            </div>
-        </div>
-    );
-};
-
-// 4. PAYMENT MODAL
-const PaymentModal = ({ isOpen, onClose, total }) => {
-    if (!isOpen) return null;
-    return (
-        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-stone-900/80 backdrop-blur-sm p-4">
-            <div className="bg-stone-900 border-2 border-[#e8e6e1] text-[#e8e6e1] p-8 max-w-lg w-full font-mono relative shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
-                <button onClick={onClose} className="absolute top-2 right-2 text-stone-500 hover:text-white"><X /></button>
-                <div className="text-center mb-8">
-                    <AlertTriangle className="mx-auto w-12 h-12 mb-4 text-yellow-500 animate-pulse" />
-                    <h2 className="text-2xl font-bold uppercase mb-2">Initiate Crypto Requisition</h2>
-                    <p className="text-xs text-stone-400">SECURE CHANNEL ESTABLISHED via WATERFORD_NODE</p>
-                </div>
-
-                <div className="space-y-4 text-xs border border-stone-700 p-4 mb-6 bg-black">
-                    <div className="flex justify-between">
-                        <span>DESTINATION:</span>
-                        <span className="text-green-500">0x71C...3A9F</span>
-                    </div>
-                    <div className="flex justify-between">
-                        <span>AMOUNT:</span>
-                        <span className="font-bold text-lg">${total} USD</span>
-                    </div>
-                    <div className="flex justify-between">
-                        <span>GAS_FEE:</span>
-                        <span>0.00042 ETH</span>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-stone-800 text-stone-500 animate-pulse">
-                        &gt; AWAITING PEER CONFIRMATION...
-                    </div>
-                </div>
-
-                <button className="w-full bg-[#e8e6e1] text-stone-900 font-bold py-3 hover:bg-white flex justify-center items-center gap-2">
-                    <Lock size={14} /> SIGN TRANSACTION
-                </button>
             </div>
         </div>
     );
@@ -882,78 +844,6 @@ const Archive = ({ posts }) => (
     </div>
 );
 
-// 11. CART DRAWER
-const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart, openCheckout }) => {
-    const total = cart.reduce((acc, item) => acc + item.price, 0).toFixed(2);
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 z-[60] flex justify-end bg-stone-900/20 backdrop-blur-sm" onClick={() => setIsOpen(false)}>
-            <div className="w-full max-w-md bg-[#e8e6e1] h-full shadow-2xl flex flex-col border-l-2 border-stone-900 font-mono" onClick={e => e.stopPropagation()}>
-                <div className="p-4 border-b border-stone-900 flex justify-between items-center bg-stone-900 text-white">
-                    <h2 className="font-bold text-sm uppercase flex items-center gap-2">
-                        <Terminal size={14} /> REQUISITION_LOG
-                    </h2>
-                    <button onClick={() => setIsOpen(false)}><X size={18} /></button>
-                </div>
-
-                {/* Persistence Simulator */}
-                <div className="bg-stone-800 text-xs text-stone-400 p-2 flex items-center gap-2 border-b border-stone-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    SYNCING TO OFFLINE NODE...
-                </div>
-
-                <div className="flex-grow overflow-y-auto p-4 space-y-4">
-                    {cart.length === 0 ? (
-                        <div className="text-center text-stone-400 mt-20 flex flex-col items-center">
-                            <Wind className="w-12 h-12 mb-4 opacity-50" />
-                            <p className="text-xs">BUFFER_EMPTY</p>
-                        </div>
-                    ) : (
-                        cart.map((item, idx) => (
-                            <div key={`${item.id}-${idx}`} className="bg-white p-3 border border-stone-300 shadow-[2px_2px_0px_0px_rgba(28,25,23,0.5)] flex justify-between items-start">
-                                <div>
-                                    <p className="text-[10px] font-bold text-stone-400">{item.id}</p>
-                                    <h4 className="font-bold text-sm uppercase">{item.name}</h4>
-                                    <div className="flex gap-2 mt-1">
-                                        {item.specs && item.specs.slice(0, 2).map(s => (
-                                            <span key={s} className="text-[9px] bg-stone-100 px-1">{s}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="font-bold text-sm">${item.price}</p>
-                                    <button
-                                        onClick={() => removeFromCart(idx)}
-                                        className="text-[10px] text-red-600 hover:bg-red-50 px-1 mt-1 uppercase"
-                                    >
-                                        [ DELETE ]
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-
-                <div className="p-6 border-t border-stone-300 bg-white">
-                    <div className="flex justify-between items-end mb-4">
-                        <span className="text-xs text-stone-500">TOTAL_COST</span>
-                        <span className="text-2xl font-black">${total}</span>
-                    </div>
-                    <button
-                        onClick={() => openCheckout(total)}
-                        className="w-full bg-stone-900 text-white font-bold py-4 hover:bg-stone-800 flex justify-center gap-2 uppercase text-sm group"
-                    >
-                        <Zap size={16} className="group-hover:text-yellow-400 transition-colors" />
-                        Process_Payment
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
 // --- MAIN APP ---
 const App = () => {
     const [view, setView] = useState('HOME');
@@ -967,9 +857,7 @@ const App = () => {
 
     // New States
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-    const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
     const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false);
-    const [checkoutTotal, setCheckoutTotal] = useState(0);
     const [products, setProducts] = useState([]);
     const [secretInput, setSecretInput] = useState('');
 
@@ -1067,12 +955,6 @@ const App = () => {
         else setView(v);
     };
 
-    const handleCheckout = (total) => {
-        setCheckoutTotal(total);
-        setIsCartOpen(false);
-        setIsCheckoutOpen(true);
-    }
-
     return (
         <div className="min-h-screen bg-[#e8e6e1] text-stone-900 font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden">
             {booting && <BootSequence onComplete={() => setBooting(false)} />}
@@ -1095,11 +977,6 @@ const App = () => {
                 data={archive}
                 onSave={(newData) => setArchive(newData)}
             />
-
-            <PaymentModal isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} total={checkoutTotal} />
-
-
-
             <Navigation setView={handleNav} cartCount={cart.length} currentView={view} />
 
             <main className="flex-grow relative z-10">
@@ -1180,11 +1057,10 @@ const App = () => {
             </main>
 
             <CartDrawer
-                cart={cart}
-                isOpen={isCartOpen}
-                setIsOpen={setIsCartOpen}
-                removeFromCart={removeFromCart}
-                openCheckout={handleCheckout}
+              cart={cart}
+              isOpen={isCartOpen}
+              setIsOpen={setIsCartOpen}
+              removeFromCart={removeFromCart}
             />
 
             <footer className="bg-stone-900 text-stone-400 py-12 px-4 mt-12 border-t-4 border-stone-500 relative z-20">
@@ -1247,7 +1123,7 @@ const App = () => {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-stone-800 text-center text-[10px] tracking-widest uppercase text-stone-600">
-                    Â© 2024 Homesteader Labs // Built for the long haul
+                    © 2024 Homesteader Labs // Built for the long haul
                 </div>
             </footer>
 
