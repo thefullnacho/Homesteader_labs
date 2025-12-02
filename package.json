@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.5.3",
+    "@vercel/blob": "^2.0.0",
     "lucide-react": "^0.441.0",
     "mqtt": "^5.14.1",
     "protobufjs": "^7.5.4",
