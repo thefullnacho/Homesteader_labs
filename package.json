@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emailjs/nodejs": "^5.0.2",
     "@stripe/stripe-js": "^8.5.3",
     "@vercel/blob": "^2.0.0",
     "lucide-react": "^0.441.0",

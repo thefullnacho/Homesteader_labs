@@ -53,13 +53,7 @@ export default async function handler(req, res) {
       mode: 'payment',
       success_url: `${req.headers.origin}/?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/?canceled=true`,
-      customer_email, // Still passes if provided (from frontend email input later)
-
-      // METADATA: Slimmed—omit full cart JSON (too long); use per-item tags if needed
-      // metadata: { 
-      //   cart: JSON.stringify(cart).slice(0, 450) + '...' // Alt: Truncate, but messy for webhooks
-      // },
-      // Or lightweight: metadata: { total_items: cart.length, has_custom: cart.some(i => i.id === 'CUST_PART') ? 'true' : 'false' }
+      customer_email,
     });
 
     res.status(200).json({ sessionId: session.id });
