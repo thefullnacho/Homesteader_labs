@@ -1,0 +1,60 @@
+[
+  {
+    "slug": "log-006-layerlines",
+    "content": "\nThe myth of smoothness.\n\n## System Notes\nMODERN CONSUMERISM HIDES THE METHOD OF PRODUCTION.\nHOMESTEADER LABS EXPOSES THE LAYER LINES. THE ARTIFACT MUST BEAR THE MARKS OF ITS MAKING. \nTO HIDE THE SEAM IS TO LIE ABOUT THE ORIGIN.\n\n/>\n\n---\n// End of Log 006",
+    "title": "Log 006: LAYER LINES",
+    "date": "2025-12-05",
+    "category": "MANUFACTURING",
+    "tags": [
+      "MFG",
+      "PRINT"
+    ]
+  },
+  {
+    "slug": "log-005-refactor",
+    "content": "\nThe transition to the Waterford Node is complete. The system now operates on a secure, decentralized stack.\n\n## System Notes\nWe successfully separated the transaction logic from the front-end interface, creating a reliable fulfillment service. The `bunker-uplink` tunnel now guarantees a persistent link to the outside world, eliminating the flaky nature of serverless timeouts.\n\n### Current Status:\n- Stripe webhooks fire directly to our self-hosted node.\n- The **Meshtastic Bridge** is operational, allowing low-power communication with other mesh nodes.\n\nTo visualize the server load, we can embed a live component:\n\n<ServerStatusLight process=\"bunker-core\" status=\"Online\" />\n\n---\n// End of Log 005",
+    "title": "Log 005: Sovereign Backend Integration",
+    "date": "2025-12-04",
+    "category": "INFRASTRUCTURE",
+    "tags": [
+      "PM2",
+      "LoRa",
+      "CORS"
+    ]
+  },
+  {
+    "slug": "log-004-fabrication",
+    "content": "\n>> TRANSITIONING TO LOCALIZED BIOPLASTIC PRODUCTION HAS REDUCED SUPPLY CHAIN DEPENDENCY BY 40%. THE BRUTALITY OF THE NEW FORMS IS NOT AN AESTHETIC CHOICE, BUT A REQUIREMENT OF THE MATERIAL CONSTRAINTS. WE BUILD WHAT LASTS.\n\n---\n//\nEND OF LOG 004\n",
+    "title": "SUSTAINABLE FABRICATION PROTOCOLS",
+    "date": "1968.11.04",
+    "category": "MANUFACTURING",
+    "tags": [
+      "MFG",
+      "ECO",
+      "LOG"
+    ]
+  },
+  {
+    "slug": "log-003-walkingman",
+    "content": "\n>> UNIT 04 SUSTAINING 85% LOAD CAPACITY OVER ROUGH TERRAIN. HYDRAULIC ASSIST SHOWING SIGNS OF THERMAL ACCUMULATION. REVISION 5 WILL INTEGRATE PASSIVE COOLING FINS DERIVED FROM THE HEAT SINK ARRAYS.\n\n---\n//\nEND OF LOG 003\n",
+    "title": "PROJECT WALKING MAN: FIELD TEST",
+    "date": "1968.09.12",
+    "category": "R&D",
+    "tags": [
+      "R&D",
+      "FIELD",
+      "REP"
+    ]
+  },
+  {
+    "slug": "log-002-mythofsmoothness",
+    "content": "\n>> MODERN CONSUMERISM HIDES THE METHOD OF PRODUCTION. HOMESTEADER LABS EXPOSES THE LAYER LINES. THE ARTIFACT MUST BEAR THE MARKS OF ITS MAKING. TO HIDE THE SEAM IS TO LIE ABOUT THE ORIGIN.\n\n---\n//\nEND OF LOG 002\n",
+    "title": "THE MYTH OF SMOOTHNESS",
+    "date": "1968.08.01",
+    "category": "PHILOSOPHY",
+    "tags": [
+      "PHIL",
+      "MFG"
+    ]
+  }
+]

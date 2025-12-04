@@ -1,0 +1,22 @@
+---
+title: "Log 005: Sovereign Backend Integration"
+date: "2025-12-04"
+category: "INFRASTRUCTURE"
+tags: ["PM2", "LoRa", "CORS"]
+---
+
+The transition to the Waterford Node is complete. The system now operates on a secure, decentralized stack.
+
+## System Notes
+We successfully separated the transaction logic from the front-end interface, creating a reliable fulfillment service. The `bunker-uplink` tunnel now guarantees a persistent link to the outside world, eliminating the flaky nature of serverless timeouts.
+
+### Current Status:
+- Stripe webhooks fire directly to our self-hosted node.
+- The **Meshtastic Bridge** is operational, allowing low-power communication with other mesh nodes.
+
+To visualize the server load, we can embed a live component:
+
+<ServerStatusLight process="bunker-core" status="Online" />
+
+---
+// End of Log 005

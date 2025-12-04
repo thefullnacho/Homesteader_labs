@@ -1,0 +1,39 @@
+[
+    {
+      "id": "WLK-MN-PRO",
+      "name": "WALKING MAN PRO",
+      "price": 299,
+      "category": "HARDWARE",
+      "description": "RPi 5 + E-Ink + Coral Edge TPU + Sony IMX500 AI Cam + BLE Sensor Suite. Offline foraging AI: 95% plant ID, yield sims. 40hr AA runtime.",
+      "specs": ["RPI5_8GB", "MOBILENETV3_CUSTOM", "BLE_SENSORSx4", "IP67", "OFFLINE_TTS"],
+      "image": "/images/pro-render.jpg",
+      "stock": 12,
+      "affiliate": false,
+      "features": ["Thanksgiving-trained model: Deadly/edible bias (79% acc)", "Solar trickle"]
+    },
+    {
+      "id": "WLK-MN-LITE",
+      "name": "WALKING MAN LITE",
+      "price": 149,
+      "category": "HARDWARE",
+      "description": "RPi Zero 2W + E-Ink + Sony IMX500. Snap-to-ID (90% conf), voice warnings. 20hr AA power.",
+      "specs": ["RPIZERO_512MB", "MOBILENETV3_INT8", "CSI_AI_CAM", "0MB_STATIC"],
+      "image": "/images/lite-render.jpg",
+      "stock": 25,
+      "affiliate": false
+    },
+    {
+      "id": "AFF-HELTEC-V3",
+      "name": "HELTEC V3 MESH NODE",
+      "price": 45,
+      "category": "AFFILIATE",
+      "description": "LoRa Meshtastic node for COMMS. Off-grid radio, solar-compatible.",
+      "specs": ["LORAX915", "ESP32", "OLED_DISP"],
+      "image": "/images/heltec.jpg",
+      "stock": "∞",
+      "affiliate": {
+        "url": "https://heltec.org/shop?ref=homelabs10",
+        "commission": "10%"
+      }
+    }
+  ]

@@ -4,15 +4,18 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "node scripts/build-archive.js && vite",
+    "build": "node scripts/build-archive.js && vite build",
+    "preview": "vite preview",
+    "build-archive": "node scripts/build-archive.js"
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.5.3",
     "@vercel/blob": "^2.0.0",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.441.0",
     "mqtt": "^5.14.1",
+    "next-mdx-remote": "^5.0.0",
     "protobufjs": "^7.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
