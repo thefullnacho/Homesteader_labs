@@ -3,6 +3,7 @@ import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Ac
 import * as THREE from 'three';
 import MeshtasticTerminal from './components/MeshtasticTerminal';
 import CartDrawer from './components/CartDrawer';
+const BUNKER_URL = 'https://relay.homesteaderlabs.com';
 
 // --- UTILS: STL PARSER ---
 const parseSTL = (buffer) => {
@@ -908,6 +909,34 @@ const App = () => {
     // Legal Modal State
     const [legalModal, setLegalModal] = useState({ isOpen: false, title: '', content: '' });
 
+    // --- NEWSLETTER LOGIC ---
+    const [subEmail, setSubEmail] = useState('');
+    const [subStatus, setSubStatus] = useState('IDLE'); // IDLE, LOADING, SUCCESS, ERROR
+
+    const handleSubscribe = async () => {
+        if (!subEmail || !subEmail.includes('@')) return;
+        setSubStatus('LOADING');
+
+        try {
+            const res = await fetch(`${BUNKER_URL}/subscribe`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: subEmail }),
+            });
+
+            if (res.ok) {
+                setSubStatus('SUCCESS');
+                setSubEmail(''); // Clear input
+                setTimeout(() => setSubStatus('IDLE'), 3000); // Reset after 3s
+            } else {
+                setSubStatus('ERROR');
+            }
+        } catch (err) {
+            console.error(err);
+            setSubStatus('ERROR');
+        }
+    };
+
     // Archive State (persisted)
     const [archive, setArchive] = useState(() => {
         try {
@@ -1097,7 +1126,7 @@ const App = () => {
 
                 {view === 'FABRICATION' && <FabWizard addToCart={addToCart} />}
 
-                {view === 'COMMS' && <MeshtasticTerminal />}
+                {view === 'COMMS' && <MeshtasticTerminal url={BUNKER_URL} />}
             </main>
 
             <CartDrawer
@@ -1161,9 +1190,36 @@ const App = () => {
                     <div className="border border-stone-700 p-4">
                         <p className="mb-2 text-stone-500 uppercase text-[10px]">Data_Feed_Subscription</p>
                         <div className="flex bg-stone-800 border border-stone-600">
-                            <input type="email" placeholder="USER@NET.LOC" className="bg-transparent w-full p-2 text-white outline-none placeholder:text-stone-600 font-mono text-xs" />
-                            <button className="px-3 hover:bg-stone-700 text-white"><ChevronRight size={14} /></button>
+                            <input
+                                type="email"
+                                placeholder="USER@NET.LOC"
+                                value={subEmail}
+                                onChange={(e) => setSubEmail(e.target.value)}
+                                className="bg-transparent w-full p-2 text-white outline-none placeholder:text-stone-600 font-mono text-xs"
+                                disabled={subStatus === 'LOADING'}
+                            />
+                            <button
+                                onClick={handleSubscribe}
+                                disabled={subStatus === 'LOADING' || !subEmail || !subEmail.includes('@')}
+                                className={`px-3 text-white ${
+                                    subStatus === 'LOADING' ? 'bg-stone-600' :
+                                    subStatus === 'SUCCESS' ? 'bg-green-700' :
+                                    subStatus === 'ERROR' ? 'bg-red-700' :
+                                    'hover:bg-stone-700'
+                                }`}
+                            >
+                                {subStatus === 'LOADING' ? '...' :
+                                 subStatus === 'SUCCESS' ? '✓' :
+                                 subStatus === 'ERROR' ? '✗' :
+                                 <ChevronRight size={14} />}
+                            </button>
                         </div>
+                        {subStatus === 'SUCCESS' && (
+                            <p className="mt-2 text-green-400 text-[10px] font-mono">SUBSCRIPTION CONFIRMED</p>
+                        )}
+                        {subStatus === 'ERROR' && (
+                            <p className="mt-2 text-red-400 text-[10px] font-mono">TRANSMISSION FAILED</p>
+                        )}
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-stone-800 text-center text-[10px] tracking-widest uppercase text-stone-600">
