@@ -123,7 +123,7 @@ const MeshtasticTerminal = ({ url }) => {
                         disabled={status !== 'UPLINK_ESTABLISHED'}
                         autoFocus
                     />
-                    <button 
+                    <button
                         type="submit" 
                         disabled={status !== 'UPLINK_ESTABLISHED'}
                         className="text-green-500 hover:text-white disabled:opacity-50"
@@ -131,8 +131,8 @@ const MeshtasticTerminal = ({ url }) => {
                         <Send size={14} />
                     </button>
                 </form>
-            </div>
-            
+                </div>
+
             {/* Last Updated Footer */}
             <div className="absolute bottom-1 right-2 text-[9px] text-green-900 z-30 select-none">
                 LAST_PACKET: {lastUpdated ? lastUpdated.toLocaleTimeString() : 'NEVER'}

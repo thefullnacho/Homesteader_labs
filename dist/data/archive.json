@@ -1,16 +1,5 @@
 [
   {
-    "slug": "log-006-layerlines",
-    "content": "\nThe myth of smoothness.\n\n## System Notes\nMODERN CONSUMERISM HIDES THE METHOD OF PRODUCTION.\nHOMESTEADER LABS EXPOSES THE LAYER LINES. THE ARTIFACT MUST BEAR THE MARKS OF ITS MAKING. \nTO HIDE THE SEAM IS TO LIE ABOUT THE ORIGIN.\n\n/>\n\n---\n// End of Log 006",
-    "title": "Log 006: LAYER LINES",
-    "date": "2025-12-05",
-    "category": "MANUFACTURING",
-    "tags": [
-      "MFG",
-      "PRINT"
-    ]
-  },
-  {
     "slug": "log-005-refactor",
     "content": "\nThe transition to the Waterford Node is complete. The system now operates on a secure, decentralized stack.\n\n## System Notes\nWe successfully separated the transaction logic from the front-end interface, creating a reliable fulfillment service. The `bunker-uplink` tunnel now guarantees a persistent link to the outside world, eliminating the flaky nature of serverless timeouts.\n\n### Current Status:\n- Stripe webhooks fire directly to our self-hosted node.\n- The **Meshtastic Bridge** is operational, allowing low-power communication with other mesh nodes.\n\nTo visualize the server load, we can embed a live component:\n\n<ServerStatusLight process=\"bunker-core\" status=\"Online\" />\n\n---\n// End of Log 005",
     "title": "Log 005: Sovereign Backend Integration",
