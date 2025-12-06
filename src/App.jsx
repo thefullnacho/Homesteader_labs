@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Activity, Zap, CheckCircle, Wind, Lock, Unlock, AlertTriangle, Save } from 'lucide-react';
+import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Activity, Zap, CheckCircle, Wind, Lock, Unlock } from 'lucide-react';
 import * as THREE from 'three';
 import MeshtasticTerminal from './components/MeshtasticTerminal';
 import CartDrawer from './components/CartDrawer';
@@ -64,68 +64,11 @@ const SECRET_PRODUCT = {
     image: 'exe'
 };
 
-const DEFAULT_ARCHIVE_POSTS = [
-    { id: 'LOG_004', date: '1968.11.04', title: 'SUSTAINABLE FABRICATION PROTOCOLS', content: '>> TRANSITIONING TO LOCALIZED BIOPLASTIC PRODUCTION HAS REDUCED SUPPLY CHAIN DEPENDENCY BY 40%. THE BRUTALITY OF THE NEW FORMS IS NOT AN AESTHETIC CHOICE, BUT A REQUIREMENT OF THE MATERIAL CONSTRAINTS. WE BUILD WHAT LASTS.', tags: ['MFG', 'ECO', 'LOG'] },
-    { id: 'LOG_003', date: '1968.09.12', title: 'PROJECT WALKING MAN: FIELD TEST', content: '>> UNIT 04 SUSTAINING 85% LOAD CAPACITY OVER ROUGH TERRAIN. HYDRAULIC ASSIST SHOWING SIGNS OF THERMAL ACCUMULATION. REVISION 5 WILL INTEGRATE PASSIVE COOLING FINS DERIVED FROM THE HEAT SINK ARRAYS.', tags: ['R&D', 'FIELD', 'REP'] },
-    { id: 'LOG_002', date: '1968.08.01', title: 'THE MYTH OF SMOOTHNESS', content: '>> MODERN CONSUMERISM HIDES THE METHOD OF PRODUCTION. HOMESTEADER LABS EXPOSES THE LAYER LINES. THE ARTIFACT MUST BEAR THE MARKS OF ITS MAKING. TO HIDE THE SEAM IS TO LIE ABOUT THE ORIGIN.', tags: ['PHIL', 'MFG'] }
-];
 
 // --- COMPONENTS ---
 
-// 1. JSON EDITOR (NEW FEATURE)
-const JsonEditor = ({ isOpen, onClose, data, onSave }) => {
-    const [jsonContent, setJsonContent] = useState('');
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        if (isOpen) setJsonContent(JSON.stringify(data, null, 2));
-    }, [isOpen, data]);
-
-    const handleSave = () => {
-        try {
-            const parsed = JSON.parse(jsonContent);
-            onSave(parsed);
-            onClose();
-        } catch (e) {
-            setError(e.message);
-        }
-    };
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 z-[210] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-            <div className="bg-stone-900 border-2 border-stone-400 w-full max-w-3xl h-[80vh] flex flex-col shadow-2xl">
-                <div className="bg-stone-800 p-2 border-b border-stone-600 flex justify-between items-center text-stone-300 font-mono text-xs">
-                    <span className="flex items-center gap-2"><FileText size={14} /> EDITING: ARCHIVE_LOGS.JSON</span>
-                    <button onClick={onClose} className="hover:text-white"><X size={16} /></button>
-                </div>
-                <div className="flex-grow relative">
-                    <textarea
-                        className="w-full h-full bg-black text-green-500 font-mono text-xs p-4 outline-none resize-none"
-                        value={jsonContent}
-                        onChange={(e) => { setJsonContent(e.target.value); setError(null); }}
-                        spellCheck="false"
-                    />
-                    {error && (
-                        <div className="absolute bottom-4 left-4 right-4 bg-red-900/90 text-white p-2 text-xs font-mono border border-red-500 flex items-center gap-2">
-                            <AlertTriangle size={14} /> SYNTAX ERROR: {error}
-                        </div>
-                    )}
-                </div>
-                <div className="p-4 bg-stone-800 border-t border-stone-600 flex justify-end gap-4">
-                    <button onClick={onClose} className="text-stone-400 hover:text-white font-mono text-xs uppercase">Cancel</button>
-                    <button onClick={handleSave} className="bg-stone-200 text-stone-900 px-4 py-2 font-mono text-xs font-bold uppercase hover:bg-white flex items-center gap-2">
-                        <Save size={14} /> Commit Changes
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-// 2. TERMINAL OVERLAY
-const TerminalOverlay = ({ isOpen, onClose, cart, products, archive, openJsonEditor }) => {
+// 1. TERMINAL OVERLAY
+const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
         'HOMESTEADER LABS TERMINAL ACCESS [v4.2.0]',
@@ -151,7 +94,7 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive, openJsonEdi
 
             switch (args[0]) {
                 case 'help':
-                    response = 'COMMANDS: ls, cat [id], edit archive, clear, whoami, exit';
+                    response = 'COMMANDS: ls, cat [id], clear, whoami, exit';
                     break;
                 case 'ls':
                     if (args[1] === '/shop' || !args[1]) {
@@ -169,14 +112,6 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive, openJsonEdi
                     if (prod) response = `READING ${id}...\nNAME: ${prod.name}\nPRICE: $${prod.price}\nDESC: ${prod.description}`;
                     else if (post) response = `READING ${id}...\nDATE: ${post.date}\nTITLE: ${post.title}\nCONTENT: ${post.content}`;
                     else response = `ERR: FILE ${id} NOT FOUND`;
-                    break;
-                case 'edit':
-                    if (args[1] === 'archive') {
-                        response = 'OPENING JSON EDITOR...';
-                        openJsonEditor();
-                    } else {
-                        response = 'ERR: TARGET NOT EDITABLE. TRY "edit archive"';
-                    }
                     break;
                 case 'clear':
                     setHistory([]);
@@ -990,7 +925,6 @@ const App = () => {
 
     // New States
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-    const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const [secretInput, setSecretInput] = useState('');
 
@@ -1154,15 +1088,8 @@ const App = () => {
                 cart={cart}
                 products={products}
                 archive={archive}
-                openJsonEditor={() => setIsJsonEditorOpen(true)}
             />
 
-            <JsonEditor
-                isOpen={isJsonEditorOpen}
-                onClose={() => setIsJsonEditorOpen(false)}
-                data={archive}
-                onSave={(newData) => setArchive(newData)}
-            />
             <Navigation setView={handleNav} cartCount={cart.length} currentView={view} />
 
             <main className="flex-grow relative z-10">
@@ -1188,9 +1115,9 @@ const App = () => {
                             </h1>
                             <div className="w-full h-px bg-stone-300 my-6"></div>
                             <p className="text-sm md:text-base max-w-2xl mx-auto mb-10 text-stone-600 uppercase tracking-wide">
-                    // Eco-brutalist fabrication for the post-industrial frontier.<br />
-                    // Precision hardware for walking men.<br />
-                    // Digital artifacts for distributed manufacture.
+                    &gt;&gt; Empowering homesteaders to build self-reliance with offline, personal<br />
+                    privacy-first tech fusing old-world grit and simplicity<br />
+                    with modern AI.
                             </p>
                             <div className="flex flex-col md:flex-row justify-center gap-4">
                                 <button
@@ -1209,7 +1136,7 @@ const App = () => {
                         </div>
 
                         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-4xl opacity-60">
-                            {['PRECISION', 'DURABILITY', 'LOCALITY', 'AUTONOMY'].map((w, i) => (
+                            {['AUTHENTIC', 'SIMPLE', 'FUNCTIONAL', 'ESSENTIAL'].map((w, i) => (
                                 <div key={w} className="border-t border-stone-500 pt-2 text-[10px] tracking-[0.2em] text-center">
                                     0{i + 1} // {w}
                                 </div>
