@@ -939,6 +939,16 @@ const App = () => {
     useEffect(() => {
         const savedCart = localStorage.getItem('homesteader_cart');
         if (savedCart) setCart(JSON.parse(savedCart));
+
+        // Handle Stripe Success
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            setCart([]);
+            localStorage.removeItem('homesteader_cart');
+            alert(">> UPLINK CONFIRMED: REQUISITION_SUCCESSFUL. CHECK EMAIL FOR LOGISTICS.");
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
     }, []);
 
     // Load Products from JSON
