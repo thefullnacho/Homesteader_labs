@@ -7,7 +7,7 @@ const PinnedTicker = ({ currentGeo, loadLocation, currentTemp, unit }) => {
 
   // Load pins on mount
   useEffect(() => {
-    const saved = localStorage.getItem('nfw_pins');
+    const saved = localStorage.getItem('hl_weather_pins');
     if (saved) {
         setPins(JSON.parse(saved));
     }
@@ -62,14 +62,14 @@ const PinnedTicker = ({ currentGeo, loadLocation, currentTemp, unit }) => {
 
       const newPins = [...pins, newPin];
       setPins(newPins);
-      localStorage.setItem('nfw_pins', JSON.stringify(newPins));
+      localStorage.setItem('hl_weather_pins', JSON.stringify(newPins));
   };
 
   const removePin = (id, e) => {
       e.stopPropagation(); // Don't trigger load
       const newPins = pins.filter(p => p.id !== id);
       setPins(newPins);
-      localStorage.setItem('nfw_pins', JSON.stringify(newPins));
+      localStorage.setItem('hl_weather_pins', JSON.stringify(newPins));
   };
 
   const isCurrentPinned = currentGeo && pins.some(p => p.id === `${currentGeo.latitude}-${currentGeo.longitude}`);

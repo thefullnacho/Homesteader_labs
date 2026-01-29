@@ -13,9 +13,6 @@ const Header = ({
 }) => {
   return (
     <header className="flex flex-col md:flex-row justify-between border-b-2 border-stone-900">
-      <div className="p-4 bg-stone-900 text-white flex items-center justify-center md:justify-start w-full md:w-auto">
-        <h1 className="text-3xl font-bold tracking-tighter">NO FRILLS WEATHER</h1>
-      </div>
       <div className="flex-1 flex flex-col md:flex-row">
         <div className="flex-1 border-b-2 md:border-b-0 md:border-r-2 border-stone-900 p-0 relative">
            <form onSubmit={handleSubmit} className="flex h-full">

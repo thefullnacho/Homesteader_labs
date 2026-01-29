@@ -22,7 +22,7 @@ const WeatherTool = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [airQualityData, setAirQualityData] = useState(null);
   const [alerts, setAlerts] = useState([]);
-  const [unit, setUnit] = useState(() => localStorage.getItem('nfw_unit') || "imperial"); 
+  const [unit, setUnit] = useState(() => localStorage.getItem('hl_weather_unit') || "imperial"); 
   const [showRaw, setShowRaw] = useState(false);
   const [radarInteractive, setRadarInteractive] = useState(false);
   const [searchInput, setSearchInput] = useState("");
@@ -32,7 +32,7 @@ const WeatherTool = () => {
 
   // Persistence for Unit
   useEffect(() => {
-    localStorage.setItem('nfw_unit', unit);
+    localStorage.setItem('hl_weather_unit', unit);
     // Reload data if we have it to update units
     if (weatherData) {
         if(weatherData.geo.name !== "COORDINATES") {
@@ -160,7 +160,7 @@ const WeatherTool = () => {
           }
 
           // 2. Save last successful location to LocalStorage
-          if (!isCoords) localStorage.setItem('nfw_last_query', query);
+          if (!isCoords) localStorage.setItem('hl_weather_last_query', query);
 
           // 3. Parallel Fetch
           const weatherPromise = fetchWeather(geoData.latitude, geoData.longitude, geoData.timezone, controller.signal);
@@ -217,7 +217,7 @@ const WeatherTool = () => {
 
   // Initial Load
   useEffect(() => {
-    const lastQuery = localStorage.getItem('nfw_last_query');
+    const lastQuery = localStorage.getItem('hl_weather_last_query');
     if (lastQuery) {
         loadData(lastQuery);
     } else {
@@ -297,10 +297,6 @@ const WeatherTool = () => {
         {loading && <LoadingScreen />}
 
       </div>
-
-      <footer className="mt-8 text-xs font-bold text-stone-400 uppercase tracking-widest">
-        No Frills Weather Systems © {new Date().getFullYear()}
-      </footer>
     </div>
   );
 };
