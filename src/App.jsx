@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Activity, Zap, CheckCircle, Wind, Lock, Unlock } from 'lucide-react';
 import * as THREE from 'three';
-import MeshtasticTerminal from './components/MeshtasticTerminal';
+import FieldTerminal from './components/FieldTerminal';
 import CartDrawer from './components/CartDrawer';
 import ServerStatusLight from './components/mdx/ServerStatusLight';
 import archiveData from '../public/data/archive.json';
@@ -1172,7 +1172,7 @@ const App = () => {
 
                 {view === 'FABRICATION' && <FabWizard addToCart={addToCart} queueStatus={queue} />}
 
-                {view === 'COMMS' && <MeshtasticTerminal url={BUNKER_URL} />}
+                {view === 'COMMS' && <FieldTerminal url={BUNKER_URL} />}
             </main>
 
             <CartDrawer
