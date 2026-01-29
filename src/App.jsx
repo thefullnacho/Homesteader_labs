@@ -825,21 +825,30 @@ const ProductCard = ({ product, addToCart, queueStatus }) => {
                         <span key={s} className="text-[9px] border border-stone-300 px-1 text-stone-500">{s}</span>
                     ))}
                 </div>
-                <button
-                    onClick={() => !isFull && addToCart(product)}
-                    disabled={isFull}
-                    className={`w-full mt-4 border border-stone-900 text-xs font-bold py-2 flex justify-center items-center gap-2 uppercase transition-colors
-                        ${isFull
-                            ? 'bg-stone-200 text-stone-500 cursor-not-allowed border-stone-300'
-                            : 'bg-transparent text-stone-900 hover:bg-stone-900 hover:text-white active:bg-stone-700'
-                        }`}
-                >
-                    {isFull ? (
-                        <>QUEUE_FULL <Lock size={12} /></>
-                    ) : (
-                        <>Add_To_Cart <ChevronRight size={12} /></>
-                    )}
-                </button>
+                {product.category === 'AFFILIATE' ? (
+                    <button
+                        onClick={() => window.open(product.affiliate.url, '_blank')}
+                        className="w-full mt-4 border border-stone-900 text-xs font-bold py-2 flex justify-center items-center gap-2 uppercase transition-colors bg-stone-900 text-white hover:bg-stone-700"
+                    >
+                        EXTERNAL_LINK <ChevronRight size={12} />
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => !isFull && addToCart(product)}
+                        disabled={isFull}
+                        className={`w-full mt-4 border border-stone-900 text-xs font-bold py-2 flex justify-center items-center gap-2 uppercase transition-colors
+                            ${isFull
+                                ? 'bg-stone-200 text-stone-500 cursor-not-allowed border-stone-300'
+                                : 'bg-transparent text-stone-900 hover:bg-stone-900 hover:text-white active:bg-stone-700'
+                            }`}
+                    >
+                        {isFull ? (
+                            <>QUEUE_FULL <Lock size={12} /></>
+                        ) : (
+                            <>Add_To_Cart <ChevronRight size={12} /></>
+                        )}
+                    </button>
+                )}
             </div>
         </div>
     </div>
