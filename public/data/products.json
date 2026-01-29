@@ -12,17 +12,6 @@
       "features": ["Thanksgiving-trained model: Deadly/edible bias (79% acc)", "Solar trickle"]
     },
     {
-      "id": "WLK-MN-LITE",
-      "name": "WALKING MAN LITE",
-      "price": 149,
-      "category": "HARDWARE",
-      "description": "RPi Zero 2W + E-Ink + Sony IMX500. Snap-to-ID (90% conf), voice warnings. 20hr AA power.",
-      "specs": ["RPIZERO_512MB", "MOBILENETV3_INT8", "CSI_AI_CAM", "0MB_STATIC"],
-      "image": "/images/lite-render.jpg",
-      "stock": 25,
-      "affiliate": false
-    },
-    {
       "id": "AFF-HELTEC-V3",
       "name": "HELTEC V3 MESH NODE",
       "price": 45,

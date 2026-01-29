@@ -5,7 +5,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // PRICE_MAP: Replace placeholder Price IDs with actual Stripe Price IDs from your Stripe dashboard
 const PRICE_MAP = {
   'WLK-MN-PRO': 'price_1SZx3tFVgUQbJcbLvJ7k4zPT', // Replace with real Stripe Price ID
-  'WLK-MN-LITE': 'price_1SZx4dFVgUQbJcbL3n80FxpL', // Replace with real Stripe Price ID
   'AFF-HELTEC-V3': 'price_aff_heltec_v3', // Replace with real Stripe Price ID
 };
 
