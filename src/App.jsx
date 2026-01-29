@@ -495,42 +495,8 @@ const Navigation = ({ setView, cartCount, currentView }) => (
     </nav>
 );
 
-// NEW COMPONENT: QUEUE MONITOR
-const QueueMonitor = ({ status }) => {
-    const isFull = status.status === 'FULL';
-    const pct = Math.min(100, Math.max(0, (status.filled / status.max) * 100));
-
-    return (
-        <div className="border border-stone-600 bg-stone-900 p-3 mb-8 max-w-sm">
-            <div className="flex justify-between items-end mb-2 text-[10px] uppercase font-bold tracking-widest">
-                <span className="text-stone-400">Fabrication_Queue</span>
-                <span className={isFull ? "text-red-500 animate-pulse" : "text-green-500"}>
-                    [{status.status}]
-                </span>
-            </div>
-
-            {/* PROGRESS BAR */}
-            <div className="w-full h-3 bg-stone-800 border border-stone-600 relative overflow-hidden">
-                {/* Striped Background */}
-                <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'linear-gradient(45deg, #000 25%, transparent 25%, transparent 50%, #000 50%, #000 75%, transparent 75%, transparent)', backgroundSize: '10px 10px'}}></div>
-
-                {/* Fill */}
-                <div
-                    className={`h-full transition-all duration-1000 ease-out ${isFull ? 'bg-red-600' : 'bg-green-600'}`}
-                    style={{ width: `${pct}%` }}
-                />
-            </div>
-
-            <div className="flex justify-between mt-2 text-[9px] font-mono text-stone-500">
-                <span>CAPACITY: {status.max} UNITS</span>
-                <span>CURRENT_LOAD: {status.filled}</span>
-            </div>
-        </div>
-    );
-};
-
 // 8. FAB WIZARD
-const FabWizard = ({ addToCart, queueStatus }) => {
+const FabWizard = ({ addToCart }) => {
     const [step, setStep] = useState(1);
     const [file, setFile] = useState(null);
     const [material, setMaterial] = useState('PLA');
@@ -729,7 +695,7 @@ const FabWizard = ({ addToCart, queueStatus }) => {
                                 </div>
                                 <button
                                     onClick={async () => {
-                                        if (!file || queueStatus?.status === 'FULL') return;
+                                        if (!file) return;
                                         try {
                                             const arrayBuffer = await file.arrayBuffer();
                                             const bytes = new Uint8Array(arrayBuffer);
@@ -772,15 +738,10 @@ const FabWizard = ({ addToCart, queueStatus }) => {
                                             console.error('Confirm print order error', err);
                                         }
                                     }}
-                                    disabled={queueStatus?.status === 'FULL'}
-                                    className={`w-full font-bold py-3 transition-all flex justify-center items-center gap-2 text-sm ${
-                                        queueStatus?.status === 'FULL'
-                                            ? 'bg-stone-400 text-stone-600 cursor-not-allowed'
-                                            : 'bg-stone-900 text-white hover:bg-stone-700 hover:scale-[1.02] active:scale-[0.98]'
-                                    }`}
+                                    className="w-full font-bold py-3 transition-all flex justify-center items-center gap-2 text-sm bg-stone-900 text-white hover:bg-stone-700 hover:scale-[1.02] active:scale-[0.98]"
                                 >
                                     <Terminal size={14} />
-                                    {queueStatus?.status === 'FULL' ? '[ QUEUE_FULL ]' : '[ CONFIRM_PRINT_ORDER ]'}
+                                    [ CONFIRM_PRINT_ORDER ]
                                 </button>
                             </div>
                         </div>
@@ -793,11 +754,9 @@ const FabWizard = ({ addToCart, queueStatus }) => {
 };
 
 // 9. PRODUCT CARD
-const ProductCard = ({ product, addToCart, queueStatus }) => {
-    const isFull = queueStatus?.status === 'FULL';
-
+const ProductCard = ({ product, addToCart }) => {
     return (
-        <div className={`group border-2 border-stone-900 bg-white hover:shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] transition-all duration-200 flex flex-col h-full relative p-1 ${isFull ? 'opacity-75' : ''}`}>
+        <div className={`group border-2 border-stone-900 bg-white hover:shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] transition-all duration-200 flex flex-col h-full relative p-1`}>
         <div className="absolute top-0 right-0 p-1">
             <div className="w-2 h-2 border border-stone-900 rounded-full bg-transparent group-hover:bg-green-500 transition-colors"></div>
         </div>
@@ -834,19 +793,10 @@ const ProductCard = ({ product, addToCart, queueStatus }) => {
                     </button>
                 ) : (
                     <button
-                        onClick={() => !isFull && addToCart(product)}
-                        disabled={isFull}
-                        className={`w-full mt-4 border border-stone-900 text-xs font-bold py-2 flex justify-center items-center gap-2 uppercase transition-colors
-                            ${isFull
-                                ? 'bg-stone-200 text-stone-500 cursor-not-allowed border-stone-300'
-                                : 'bg-transparent text-stone-900 hover:bg-stone-900 hover:text-white active:bg-stone-700'
-                            }`}
+                        onClick={() => addToCart(product)}
+                        className={`w-full mt-4 border border-stone-900 text-xs font-bold py-2 flex justify-center items-center gap-2 uppercase transition-colors bg-transparent text-stone-900 hover:bg-stone-900 hover:text-white active:bg-stone-700`}
                     >
-                        {isFull ? (
-                            <>QUEUE_FULL <Lock size={12} /></>
-                        ) : (
-                            <>Add_To_Cart <ChevronRight size={12} /></>
-                        )}
+                        <>Add_To_Cart <ChevronRight size={12} /></>
                     </button>
                 )}
             </div>
@@ -935,30 +885,6 @@ const App = () => {
     const [isTerminalOpen, setIsTerminalOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const [secretInput, setSecretInput] = useState('');
-
-    // --- QUEUE LOGIC ---
-    const [queue, setQueue] = useState({ filled: 0, max: 10, status: 'LOADING' });
-
-    useEffect(() => {
-        const fetchQueue = async () => {
-            try {
-                // Uses the BUNKER_URL you defined earlier
-                const res = await fetch(`${BUNKER_URL}/queue-status`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setQueue(data);
-                }
-            } catch (e) {
-                console.error("Queue intel failed", e);
-                // Fallback so the shop doesn't break if Bunker is down
-                setQueue({ filled: 0, max: 10, status: 'UNKNOWN' });
-            }
-        };
-        fetchQueue();
-        // Optional: Poll every 30s to keep it fresh
-        const interval = setInterval(fetchQueue, 30000);
-        return () => clearInterval(interval);
-    }, []);
 
     // Legal Modal State
     const [legalModal, setLegalModal] = useState({ isOpen: false, title: '', content: '' });
@@ -1163,14 +1089,9 @@ const App = () => {
                             </div>
                         </div>
 
-                        {/* QUEUE STATUS MONITOR */}
-                        <div className="flex justify-center mb-8">
-                            <QueueMonitor status={queue} />
-                        </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {products.map(p => (
-                                <ProductCard key={p.id} product={p} addToCart={addToCart} queueStatus={queue} />
+                                <ProductCard key={p.id} product={p} addToCart={addToCart} />
                             ))}
                         </div>
                     </div>
@@ -1178,7 +1099,7 @@ const App = () => {
 
                 {view === 'ARCHIVE' && <Archive posts={archive} />}
 
-                {view === 'FABRICATION' && <FabWizard addToCart={addToCart} queueStatus={queue} />}
+                {view === 'FABRICATION' && <FabWizard addToCart={addToCart} />}
             </main>
 
             <CartDrawer
