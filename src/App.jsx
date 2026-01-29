@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Activity, Zap, CheckCircle, Wind, Lock, Unlock } from 'lucide-react';
 import * as THREE from 'three';
 import CartDrawer from './components/CartDrawer';
+import WeatherTool from './components/weather/WeatherTool';
 import ServerStatusLight from './components/mdx/ServerStatusLight';
 import archiveData from '../public/data/archive.json';
 import { MDXRemote } from 'next-mdx-remote';
@@ -462,7 +463,7 @@ const Navigation = ({ setView, cartCount, currentView }) => (
             </div>
 
             <div className="hidden md:flex gap-8 text-sm">
-                {['SHOP', 'ARCHIVE', 'FABRICATION'].map((item) => (
+                {['SHOP', 'ARCHIVE', 'FABRICATION', 'WEATHER'].map((item) => (
                     <button
                         key={item}
                         onClick={() => setView(item)}
@@ -482,7 +483,7 @@ const Navigation = ({ setView, cartCount, currentView }) => (
             </button>
         </div>
         <div className="md:hidden flex justify-around border-t border-stone-900 py-2 bg-stone-200 text-xs">
-            {['SHOP', 'ARCHIVE', 'FABRICATION'].map((item) => (
+            {['SHOP', 'ARCHIVE', 'FABRICATION', 'WEATHER'].map((item) => (
                 <button
                     key={item}
                     onClick={() => setView(item)}
@@ -1110,6 +1111,8 @@ const App = () => {
                 {view === 'ARCHIVE' && <Archive posts={archive} />}
 
                 {view === 'FABRICATION' && <FabWizard addToCart={addToCart} />}
+
+                {view === 'WEATHER' && <WeatherTool />}
             </main>
 
             <CartDrawer
