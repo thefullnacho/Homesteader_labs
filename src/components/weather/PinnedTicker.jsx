@@ -75,24 +75,24 @@ const PinnedTicker = ({ currentGeo, loadLocation, currentTemp, unit }) => {
   const isCurrentPinned = currentGeo && pins.some(p => p.id === `${currentGeo.latitude}-${currentGeo.longitude}`);
 
   return (
-    <div className="w-full bg-black text-white border-b-2 border-black flex flex-col md:flex-row justify-between items-center px-4 py-2 gap-4">
+    <div className="w-full bg-stone-900 text-white border-b-2 border-stone-900 flex flex-col md:flex-row justify-between items-center px-4 py-2 gap-4">
         
         {/* Ticker List */}
         <div className="flex-1 flex gap-4 overflow-x-auto w-full md:w-auto items-center scrollbar-hide">
-            <span className="text-xs font-bold text-gray-500 uppercase whitespace-nowrap hidden md:inline">PINNED:</span>
-            {pins.length === 0 && <span className="text-xs text-gray-600 font-mono">NO_LOCATIONS_SAVED</span>}
+            <span className="text-xs font-bold text-stone-500 uppercase whitespace-nowrap hidden md:inline">PINNED:</span>
+            {pins.length === 0 && <span className="text-xs text-stone-600 font-mono">NO_LOCATIONS_SAVED</span>}
             
             {pins.map(pin => (
                 <div 
                     key={pin.id} 
                     onClick={() => loadLocation(pin.lat, pin.lon)}
-                    className="flex items-center gap-2 bg-gray-900 px-3 py-1 rounded cursor-pointer hover:bg-gray-800 transition-colors whitespace-nowrap border border-gray-700 hover:border-white"
+                    className="flex items-center gap-2 bg-stone-900 px-3 py-1 rounded cursor-pointer hover:bg-stone-800 transition-colors whitespace-nowrap border border-stone-700 hover:border-white"
                 >
                     <span className="text-sm font-bold uppercase">{pin.name}</span>
                     <span className="text-sm font-mono text-yellow-400">
                         {pinnedWeather[pin.id] !== undefined ? `${pinnedWeather[pin.id].toFixed(0)}°` : '--'}
                     </span>
-                    <button onClick={(e) => removePin(pin.id, e)} className="text-gray-500 hover:text-red-500 ml-1">
+                    <button onClick={(e) => removePin(pin.id, e)} className="text-stone-500 hover:text-red-500 ml-1">
                         <Trash2 size={12} />
                     </button>
                 </div>
@@ -112,7 +112,7 @@ const PinnedTicker = ({ currentGeo, loadLocation, currentTemp, unit }) => {
                         disabled={pins.length >= 3}
                         className={`
                             text-xs font-bold uppercase flex items-center gap-2 px-3 py-1 border border-white
-                            ${pins.length >= 3 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white hover:text-black transition-colors'}
+                            ${pins.length >= 3 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white hover:text-stone-900 transition-colors'}
                         `}
                     >
                         <Pin size={14} /> 

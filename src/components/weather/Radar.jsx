@@ -5,8 +5,8 @@ const Radar = ({ geo, interactive, setInteractive }) => {
   if (!geo) return null;
 
   return (
-    <div className="border-b-2 border-black p-0 bg-gray-200">
-        <div className="bg-black text-white px-4 py-1 text-xs font-bold uppercase flex justify-between items-center">
+    <div className="border-b-2 border-stone-900 p-0 bg-stone-200">
+        <div className="bg-stone-900 text-white px-4 py-1 text-xs font-bold uppercase flex justify-between items-center">
             <div className="flex items-center gap-2">
                 <span>LIVE_RADAR_FEED</span>
                 <RadarIcon size={16} />
@@ -20,7 +20,7 @@ const Radar = ({ geo, interactive, setInteractive }) => {
                 <span className="hidden sm:inline">{interactive ? "INTERACTIVE_MODE" : "PASSIVE_MODE"}</span>
             </button>
         </div>
-        <div className="w-full h-[400px] relative bg-gray-300 overflow-hidden">
+        <div className="w-full h-[400px] relative bg-stone-300 overflow-hidden">
              <iframe 
                 width="100%" 
                 height="400" 

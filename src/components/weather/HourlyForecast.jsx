@@ -24,8 +24,8 @@ const HourlyForecast = ({ hourlyData, unit, currentTime }) => {
   }
 
   return (
-    <div className="border-b-2 border-black overflow-hidden bg-gray-50">
-        <div className="bg-black text-white px-4 py-1 text-xs font-bold uppercase inline-block">
+    <div className="border-b-2 border-stone-900 overflow-hidden bg-stone-50">
+        <div className="bg-stone-900 text-white px-4 py-1 text-xs font-bold uppercase inline-block">
             HOURLY_TEMP (24H)
         </div>
         <div className="overflow-x-auto whitespace-nowrap scrollbar-hide flex">
@@ -37,7 +37,7 @@ const HourlyForecast = ({ hourlyData, unit, currentTime }) => {
                const isSnow = snow > 0;
 
                return (
-               <div key={idx} className="inline-flex flex-col items-center justify-between border-r-2 border-black p-4 min-w-[100px] hover:bg-white transition-colors">
+               <div key={idx} className="inline-flex flex-col items-center justify-between border-r-2 border-stone-900 p-4 min-w-[100px] hover:bg-white transition-colors">
                   <span className="text-xs font-bold mb-2">{formatTime(time)}</span>
                   <span className="text-2xl font-black mb-2">{temp.toFixed(0)}°</span>
                   <div className="h-12 w-full flex items-end justify-center gap-1">

@@ -29,17 +29,17 @@ const PressureGraph = ({ hourly, unit }) => {
     }).join(' ');
 
     return (
-        <div className="border-b-2 border-black p-6 bg-white">
+        <div className="border-b-2 border-stone-900 p-6 bg-white">
             <div className="flex justify-between items-end mb-4">
-                 <h3 className="text-sm font-bold uppercase bg-black text-white inline-block px-2 py-1">
+                 <h3 className="text-sm font-bold uppercase bg-stone-900 text-white inline-block px-2 py-1">
                     ATMOSPHERIC_PRESSURE (24H)
                 </h3>
                 <div className="text-right">
-                    <span className="block text-xs font-bold text-gray-500 uppercase">CURRENT</span>
+                    <span className="block text-xs font-bold text-stone-500 uppercase">CURRENT</span>
                     <span className="text-xl font-black">{data[0].toFixed(decimals)} {unitLabel}</span>
                 </div>
             </div>
-            <div className="relative border-2 border-black border-dashed bg-gray-50 h-48 w-full overflow-hidden">
+            <div className="relative border-2 border-stone-900 border-dashed bg-stone-50 h-48 w-full overflow-hidden">
                 <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full preserve-3d">
                     <line x1={paddingX} y1={paddingY} x2={width - paddingX} y2={paddingY} stroke="#e5e7eb" strokeWidth="2" strokeDasharray="10,10" />
                     <line x1={paddingX} y1={height - paddingY} x2={width - paddingX} y2={height - paddingY} stroke="#e5e7eb" strokeWidth="2" strokeDasharray="10,10" />
@@ -66,8 +66,8 @@ const PressureGraph = ({ hourly, unit }) => {
                         );
                     })}
                 </svg>
-                <div className="absolute top-2 left-2 text-xs font-bold bg-white px-1 border border-black">MAX: {max.toFixed(decimals)}</div>
-                <div className="absolute bottom-2 left-2 text-xs font-bold bg-white px-1 border border-black">MIN: {min.toFixed(decimals)}</div>
+                <div className="absolute top-2 left-2 text-xs font-bold bg-white px-1 border border-stone-900">MAX: {max.toFixed(decimals)}</div>
+                <div className="absolute bottom-2 left-2 text-xs font-bold bg-white px-1 border border-stone-900">MIN: {min.toFixed(decimals)}</div>
             </div>
         </div>
     );

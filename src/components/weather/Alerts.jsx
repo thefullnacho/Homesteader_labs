@@ -18,7 +18,7 @@ const Alerts = ({ alerts }) => {
   return (
     <div 
         onClick={scrollToDetails}
-        className="bg-red-600 text-white border-b-2 border-black cursor-pointer hover:bg-red-700 transition-colors group"
+        className="bg-red-600 text-white border-b-2 border-stone-900 cursor-pointer hover:bg-red-700 transition-colors group"
     >
         <div className="p-4 flex flex-col md:flex-row items-center justify-between gap-4 animate-pulse group-hover:animate-none">
             <div className="flex items-center gap-4">

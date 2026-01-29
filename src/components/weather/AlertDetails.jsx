@@ -26,7 +26,7 @@ const AlertDetails = ({ alerts }) => {
                         </span>
                     )}
                 </div>
-                <p className="font-bold text-sm mb-2 text-gray-700">{alert.properties.headline}</p>
+                <p className="font-bold text-sm mb-2 text-stone-700">{alert.properties.headline}</p>
                 <p className="text-xs font-mono whitespace-pre-wrap bg-white p-2 border border-red-200 mt-2 max-h-40 overflow-auto">
                     {alert.properties.description}
                 </p>

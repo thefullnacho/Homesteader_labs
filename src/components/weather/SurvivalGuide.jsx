@@ -48,7 +48,7 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
   // AQI Color
   const getAqiColor = (val) => {
       if (val <= 50) return "bg-green-500 text-white";
-      if (val <= 100) return "bg-yellow-400 text-black";
+      if (val <= 100) return "bg-yellow-400 text-stone-900";
       if (val <= 150) return "bg-orange-500 text-white";
       if (val <= 200) return "bg-red-600 text-white";
       if (val <= 300) return "bg-purple-600 text-white";
@@ -56,10 +56,10 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
   };
   
   return (
-    <div className="border-b-2 border-black bg-white grid grid-cols-1 md:grid-cols-3">
+    <div className="border-b-2 border-stone-900 bg-white grid grid-cols-1 md:grid-cols-3">
         {/* SOLAR / LUNAR */}
-        <div className="p-4 border-b-2 md:border-b-0 md:border-r-2 border-black flex flex-col justify-center">
-            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-2">
+        <div className="p-4 border-b-2 md:border-b-0 md:border-r-2 border-stone-900 flex flex-col justify-center">
+            <h3 className="text-xs font-bold text-stone-500 uppercase mb-2 flex items-center gap-2">
                 <Sun size={16} /> CYCLE_DATA
             </h3>
             <div className="text-sm font-bold flex justify-between mb-1">
@@ -70,25 +70,25 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
                 <span>SUNSET:</span>
                 <span>{formatTime(daily.sunset[0])}</span>
             </div>
-            <div className="text-xs font-mono uppercase bg-gray-100 p-1 border border-gray-300 text-center">
+            <div className="text-xs font-mono uppercase bg-[#e8e6e1] p-1 border border-stone-300 text-center">
                 MOON: {getMoonPhaseLabel()}
             </div>
         </div>
 
         {/* ATMOSPHERE (Dew Point) */}
-        <div className="p-4 border-b-2 md:border-b-0 md:border-r-2 border-black flex flex-col justify-center">
-             <h3 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-2">
+        <div className="p-4 border-b-2 md:border-b-0 md:border-r-2 border-stone-900 flex flex-col justify-center">
+             <h3 className="text-xs font-bold text-stone-500 uppercase mb-2 flex items-center gap-2">
                 <Droplets size={16} /> SURVIVAL_INDEX
             </h3>
             <div className="flex items-end justify-between mb-2">
                 <div>
-                    <span className="block text-xs font-bold text-gray-400">DEW POINT</span>
+                    <span className="block text-xs font-bold text-stone-400">DEW POINT</span>
                     <span className="text-2xl font-black">
                         {current.dew_point_2m?.toFixed(1)}°
                     </span>
                 </div>
                 <div className="text-right">
-                    <span className="block text-xs font-bold text-gray-400">APPARENT</span>
+                    <span className="block text-xs font-bold text-stone-400">APPARENT</span>
                     <span className="text-xl font-bold">
                         {current.apparent_temperature?.toFixed(1)}°
                     </span>
@@ -96,7 +96,7 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
             </div>
              <div className="flex justify-between items-center mt-1">
                  <span className="text-xs font-bold uppercase">UV INDEX (MAX)</span>
-                 <span className={`px-2 py-0.5 text-xs font-bold border border-black ${
+                 <span className={`px-2 py-0.5 text-xs font-bold border border-stone-900 ${
                      daily.uv_index_max?.[0] > 7 ? "bg-red-500 text-white" : "bg-green-300"
                  }`}>
                      {daily.uv_index_max?.[0]?.toFixed(1) || "0.0"}
@@ -106,13 +106,13 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
 
         {/* AIR QUALITY */}
         <div className="p-4 flex flex-col justify-center">
-             <h3 className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-2">
+             <h3 className="text-xs font-bold text-stone-500 uppercase mb-2 flex items-center gap-2">
                 <Wind size={16} /> AIR_QUALITY
             </h3>
             {aqi ? (
                 <>
                     <div className="flex items-center gap-4 mb-2">
-                        <div className={`flex-1 p-2 text-center border-2 border-black font-black text-xl ${getAqiColor(aqi.us_aqi)}`}>
+                        <div className={`flex-1 p-2 text-center border-2 border-stone-900 font-black text-xl ${getAqiColor(aqi.us_aqi)}`}>
                             {aqi.us_aqi} <span className="text-xs font-normal block">US AQI</span>
                         </div>
                     </div>
@@ -122,7 +122,7 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
                     </div>
                 </>
             ) : (
-                <div className="text-sm font-bold text-gray-400 italic">OFFLINE / NO DATA</div>
+                <div className="text-sm font-bold text-stone-400 italic">OFFLINE / NO DATA</div>
             )}
         </div>
     </div>
