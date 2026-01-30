@@ -3,6 +3,7 @@ import { ShoppingCart, Upload, Box, FileText, X, ChevronRight, Terminal, Cpu, Ac
 import * as THREE from 'three';
 import CartDrawer from './components/CartDrawer';
 import WeatherTool from './components/weather/WeatherTool';
+import Manifesto from './components/Manifesto';
 import ServerStatusLight from './components/mdx/ServerStatusLight';
 import archiveData from '../public/data/archive.json';
 import { MDXRemote } from 'next-mdx-remote';
@@ -75,6 +76,9 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
         'ENTER "help" FOR COMMAND LIST',
         '----------------------------------------'
     ]);
+    const [mode, setMode] = useState('TERMINAL'); // 'TERMINAL' | 'EDITOR'
+    const [editorData, setEditorData] = useState({ title: '', date: '', tags: '', content: '' });
+
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
 
@@ -83,8 +87,8 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
     }, [history, isOpen]);
 
     useEffect(() => {
-        if (isOpen && inputRef.current) inputRef.current.focus();
-    }, [isOpen]);
+        if (isOpen && mode === 'TERMINAL' && inputRef.current) inputRef.current.focus();
+    }, [isOpen, mode]);
 
     const handleCommand = (e) => {
         if (e.key === 'Enter') {
@@ -94,7 +98,7 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
 
             switch (args[0]) {
                 case 'help':
-                    response = 'COMMANDS: ls, cat [id], clear, whoami, exit';
+                    response = 'COMMANDS: ls, cat [id], write, clear, whoami, exit';
                     break;
                 case 'ls':
                     if (args[1] === '/shop' || !args[1]) {
@@ -113,6 +117,17 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
                     else if (post) response = `READING ${id}...\nDATE: ${post.date}\nTITLE: ${post.title}\nCONTENT: ${post.content}`;
                     else response = `ERR: FILE ${id} NOT FOUND`;
                     break;
+                case 'write':
+                    setMode('EDITOR');
+                    setEditorData({
+                        title: '',
+                        date: new Date().toISOString().split('T')[0],
+                        tags: 'log, update',
+                        content: ''
+                    });
+                    setHistory(prev => [...prev, `> ${input}`, 'STARTING FIELD_RECORDER_V1...']);
+                    setInput('');
+                    return;
                 case 'clear':
                     setHistory([]);
                     setInput('');
@@ -136,30 +151,120 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
         }
     };
 
+    const handleSaveLog = () => {
+        const slug = editorData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const filename = `log-${archive.length + 101}-${slug}.mdx`; // Rough auto-increment
+
+        const fileContent = `---
+title: "${editorData.title}"
+date: "${editorData.date}"
+tags: [${editorData.tags.split(',').map(t => `"${t.trim()}"`).join(', ')}]
+slug: "${slug}"
+---
+
+${editorData.content}
+`;
+
+        const blob = new Blob([fileContent], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        setHistory(prev => [...prev, `FILE SAVED: ${filename}`, 'UPLOAD MANUALLY TO /content/logs/', ' ']);
+        setMode('TERMINAL');
+    };
+
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[200] bg-black/95 text-green-500 font-mono text-xs md:text-sm p-4 md:p-8 flex flex-col font-bold" onClick={() => inputRef.current?.focus()}>
+        <div className="fixed inset-0 z-[200] bg-black/95 text-green-500 font-mono text-xs md:text-sm p-4 md:p-8 flex flex-col font-bold" onClick={() => mode === 'TERMINAL' && inputRef.current?.focus()}>
             <div className="flex justify-between border-b border-green-800 pb-2 mb-4">
-                <span>TERMINAL_SESSION_ACTIVE</span>
+                <span>{mode === 'EDITOR' ? 'FIELD_RECORDER_ACTIVE' : 'TERMINAL_SESSION_ACTIVE'}</span>
                 <span className="cursor-pointer hover:text-white" onClick={onClose}>[X] TERMINATE</span>
             </div>
-            <div className="flex-grow overflow-y-auto whitespace-pre-wrap font-normal">
-                {history.map((line, i) => <div key={i}>{line}</div>)}
-                <div ref={bottomRef} />
-            </div>
-            <div className="flex items-center gap-2 mt-4 border-t border-green-800 pt-4">
-                <span>user@homesteader:~$</span>
-                <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyDown={handleCommand}
-                    className="bg-transparent outline-none flex-grow text-white caret-green-500"
-                    autoFocus
-                />
-            </div>
+
+            {mode === 'TERMINAL' ? (
+                <>
+                    <div className="flex-grow overflow-y-auto whitespace-pre-wrap font-normal">
+                        {history.map((line, i) => <div key={i}>{line}</div>)}
+                        <div ref={bottomRef} />
+                    </div>
+                    <div className="flex items-center gap-2 mt-4 border-t border-green-800 pt-4">
+                        <span>user@homesteader:~$</span>
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={handleCommand}
+                            className="bg-transparent outline-none flex-grow text-white caret-green-500"
+                            autoFocus
+                        />
+                    </div>
+                </>
+            ) : (
+                <div className="flex-grow flex flex-col gap-4 text-green-400">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-[10px] text-green-800 mb-1">TITLE</label>
+                            <input
+                                type="text"
+                                className="w-full bg-stone-900 border border-green-800 p-2 text-white outline-none focus:border-green-500"
+                                value={editorData.title}
+                                onChange={e => setEditorData({ ...editorData, title: e.target.value })}
+                                placeholder="ENTER_TITLE"
+                                autoFocus
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] text-green-800 mb-1">DATE (YYYY-MM-DD)</label>
+                            <input
+                                type="text"
+                                className="w-full bg-stone-900 border border-green-800 p-2 text-white outline-none focus:border-green-500"
+                                value={editorData.date}
+                                onChange={e => setEditorData({ ...editorData, date: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-[10px] text-green-800 mb-1">TAGS (COMMA SEPARATED)</label>
+                        <input
+                            type="text"
+                            className="w-full bg-stone-900 border border-green-800 p-2 text-white outline-none focus:border-green-500"
+                            value={editorData.tags}
+                            onChange={e => setEditorData({ ...editorData, tags: e.target.value })}
+                        />
+                    </div>
+                    <div className="flex-grow flex flex-col">
+                         <label className="block text-[10px] text-green-800 mb-1">CONTENT (MARKDOWN SUPPORTED)</label>
+                        <textarea
+                            className="flex-grow w-full bg-stone-900 border border-green-800 p-4 text-white outline-none resize-none focus:border-green-500 font-mono"
+                            value={editorData.content}
+                            onChange={e => setEditorData({ ...editorData, content: e.target.value })}
+                            placeholder="BEGIN TRANSMISSION..."
+                        />
+                    </div>
+                    <div className="flex justify-end gap-4 border-t border-green-800 pt-4">
+                        <button
+                            onClick={() => setMode('TERMINAL')}
+                            className="px-4 py-2 border border-green-800 text-green-800 hover:text-white hover:border-white"
+                        >
+                            [ CANCEL ]
+                        </button>
+                        <button
+                            onClick={handleSaveLog}
+                            className="px-4 py-2 bg-green-900 text-white hover:bg-green-700"
+                        >
+                            [ ENCRYPT & EXPORT ]
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -1113,6 +1218,7 @@ const App = () => {
                 {view === 'FABRICATION' && <FabWizard addToCart={addToCart} />}
 
                 {view === 'WEATHER' && <WeatherTool />}
+                {view === 'MANIFESTO' && <Manifesto />}
             </main>
 
             <CartDrawer
@@ -1133,9 +1239,8 @@ const App = () => {
                     <div>
                         <h5 className="text-white font-bold mb-4 uppercase">Direct_Link</h5>
                         <ul className="space-y-2">
-                            <li><button onClick={() => setView('SHOP')} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ HARDWARE ]</button></li>
-                            <li><button onClick={() => setView('SHOP')} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ DIGITAL ]</button></li>
-                            <li><button onClick={() => setView('ARCHIVE')} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ MANIFESTO ]</button></li>
+                            <li><button onClick={() => { setView('SHOP'); window.scrollTo(0, 0); }} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ HARDWARE ]</button></li>
+                            <li><button onClick={() => { setView('MANIFESTO'); window.scrollTo(0, 0); }} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ MANIFESTO ]</button></li>
                         </ul>
                     </div>
                     <div>
@@ -1209,7 +1314,7 @@ const App = () => {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-stone-800 text-center text-[10px] tracking-widest uppercase text-stone-600">
-                    © 2024 Homesteader Labs // Built for the long haul
+                    © 2026 Homesteader Labs // Know your nature
                 </div>
             </footer>
 
