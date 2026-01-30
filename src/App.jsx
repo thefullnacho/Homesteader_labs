@@ -175,6 +175,7 @@ const App = () => {
                 currentView={view} 
                 isDark={isDark}
                 toggleDarkMode={toggleDarkMode}
+                toggleTerminal={() => setIsTerminalOpen(prev => !prev)}
             />
 
             <main className="flex-grow relative z-10">
