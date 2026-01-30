@@ -42,13 +42,13 @@ const ArchiveView = ({ posts }) => {
             <div className="space-y-12">
                 {posts.map((post, idx) => (
                     <div key={post.slug} className="group relative">
-                        <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-stone-300 group-hover:bg-stone-900 transition-colors"></div>
+                        <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-stone-300 dark:bg-stone-700 group-hover:bg-stone-900 dark:group-hover:bg-stone-200 transition-colors"></div>
                         <div className="flex items-center gap-3 mb-2">
-                            <span className="bg-stone-900 text-white text-[10px] px-1">{post.slug}</span>
-                            <span className="text-[10px] text-stone-500">{post.date}</span>
+                            <span className="bg-stone-900 dark:bg-stone-200 text-white dark:text-stone-900 text-[10px] px-1">{post.slug}</span>
+                            <span className="text-[10px] text-stone-500 dark:text-stone-400">{post.date}</span>
                         </div>
-                        <h3 className="font-bold text-xl mb-3 uppercase decoration-stone-400 underline decoration-1 underline-offset-4">{post.title}</h3>
-                        <div className="text-sm text-stone-800 leading-relaxed mb-4 max-w-2xl border-l-2 border-stone-200 pl-4 py-1 group-hover:border-stone-500 transition-colors">
+                        <h3 className="font-bold text-xl mb-3 uppercase decoration-stone-400 dark:decoration-stone-600 underline decoration-1 underline-offset-4">{post.title}</h3>
+                        <div className="text-sm text-stone-800 dark:text-stone-200 leading-relaxed mb-4 max-w-2xl border-l-2 border-stone-200 dark:border-stone-800 pl-4 py-1 group-hover:border-stone-500 dark:group-hover:border-stone-400 transition-colors">
                             {mdxSources[post.slug] ? (
                                 <MDXRemote {...mdxSources[post.slug]} components={components} />
                             ) : (
@@ -57,7 +57,7 @@ const ArchiveView = ({ posts }) => {
                         </div>
                         <div className="flex gap-2">
                             {post.tags?.map(tag => (
-                                <span key={tag} className="text-[10px] text-stone-400 uppercase border border-stone-200 px-1 rounded-sm hover:border-stone-900 hover:text-stone-900 cursor-default">#{tag}</span>
+                                <span key={tag} className="text-[10px] text-stone-400 dark:text-stone-500 uppercase border border-stone-200 dark:border-stone-800 px-1 rounded-sm hover:border-stone-900 dark:hover:border-stone-200 hover:text-stone-900 dark:hover:text-stone-200 cursor-default">#{tag}</span>
                             ))}
                         </div>
                     </div>

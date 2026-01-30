@@ -3,7 +3,7 @@ import React from 'react';
 const HomeView = ({ setView }) => {
     return (
         <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 text-center">
-            <div className="max-w-5xl w-full border-2 border-stone-900 p-8 md:p-20 bg-white/90 backdrop-blur-sm shadow-brutalist-lg relative">
+            <div className="max-w-5xl w-full border-2 border-stone-900 p-8 md:p-20 bg-white/90 dark:bg-stone-900/90 backdrop-blur-sm shadow-brutalist-lg relative">
                 {/* Decorative Corners */}
                 <div className="absolute top-0 left-0 w-4 h-4 border-l-4 border-t-4 border-stone-900"></div>
                 <div className="absolute top-0 right-0 w-4 h-4 border-r-4 border-t-4 border-stone-900"></div>

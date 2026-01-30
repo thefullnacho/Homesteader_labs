@@ -22,15 +22,15 @@ const ServerStatusLight = ({ process, status }) => {
         switch (status?.toLowerCase()) {
             case 'online':
             case 'running':
-                return 'border-green-500 bg-green-50';
+                return 'border-green-500 bg-green-50 dark:bg-green-950/30';
             case 'warning':
             case 'degraded':
-                return 'border-yellow-500 bg-yellow-50';
+                return 'border-yellow-500 bg-yellow-50 dark:bg-yellow-950/30';
             case 'offline':
             case 'error':
-                return 'border-red-500 bg-red-50';
+                return 'border-red-500 bg-red-50 dark:bg-red-950/30';
             default:
-                return 'border-gray-500 bg-gray-50';
+                return 'border-gray-500 bg-gray-50 dark:bg-gray-900/30';
         }
     };
 
@@ -38,7 +38,7 @@ const ServerStatusLight = ({ process, status }) => {
         <div className={`inline-flex items-center gap-2 px-3 py-1 border rounded-md font-mono text-xs ${getStatusColor()}`}>
             {getStatusIcon()}
             <span className="font-bold">{process || 'UNKNOWN'}</span>
-            <span className="text-gray-600">[{status || 'UNKNOWN'}]</span>
+            <span className="text-gray-600 dark:text-gray-400">[{status || 'UNKNOWN'}]</span>
         </div>
     );
 };

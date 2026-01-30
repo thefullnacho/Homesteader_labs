@@ -4,6 +4,10 @@ import CartDrawer from './components/CartDrawer';
 import Manifesto from './components/Manifesto';
 import archiveData from '../public/data/archive.json';
 
+// Hooks
+import useCart from './hooks/useCart';
+import useDarkMode from './hooks/useDarkMode';
+
 // Components
 import TerminalOverlay from './components/TerminalOverlay';
 import BootSequence from './components/BootSequence';
@@ -34,8 +38,10 @@ const SECRET_PRODUCT = {
 // --- MAIN APP ---
 const App = () => {
     const [view, setView] = useState('HOME');
-    const [cart, setCart] = useState([]);
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    
+    // Custom Hooks
+    const { cart, isCartOpen, setIsCartOpen, addToCart, removeFromCart } = useCart();
+    const { isDark, toggleDarkMode } = useDarkMode();
 
     // Boot Persistence
     const [booting, setBooting] = useState(() => {
@@ -96,22 +102,6 @@ const App = () => {
         } catch (e) { }
     }, [archive]);
 
-    // Initial Load Cart
-    useEffect(() => {
-        const savedCart = localStorage.getItem('homesteader_cart');
-        if (savedCart) setCart(JSON.parse(savedCart));
-
-        // Handle Stripe Success
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('success') === 'true') {
-            setCart([]);
-            localStorage.removeItem('homesteader_cart');
-            alert(">> UPLINK CONFIRMED: REQUISITION_SUCCESSFUL. CHECK EMAIL FOR LOGISTICS.");
-            // Clean URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    }, []);
-
     // Load Products from JSON
     useEffect(() => {
         const fetchProducts = async () => {
@@ -130,11 +120,6 @@ const App = () => {
 
         fetchProducts();
     }, []);
-
-    // Save Cart
-    useEffect(() => {
-        localStorage.setItem('homesteader_cart', JSON.stringify(cart));
-    }, [cart]);
 
     // Global Key Listener for Secret Code & Terminal
     useEffect(() => {
@@ -164,27 +149,16 @@ const App = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [products]);
 
-    const addToCart = (product) => {
-        setCart([...cart, product]);
-        setIsCartOpen(true);
-    };
-
-    const removeFromCart = (index) => {
-        const newCart = [...cart];
-        newCart.splice(index, 1);
-        setCart(newCart);
-    };
-
     const handleNav = (v) => {
         if (v === 'CART') setIsCartOpen(true);
         else setView(v);
     };
 
     return (
-        <div className="min-h-screen bg-[#e8e6e1] text-stone-900 font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden">
+        <div className="min-h-screen bg-[#e8e6e1] dark:bg-[#1c1917] text-stone-900 dark:text-[#e8e6e1] font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden transition-colors duration-300">
             {booting && <BootSequence onComplete={() => setBooting(false)} />}
 
-            <BioMonitor />
+            {!isDark && <BioMonitor />}
 
             {/* Overlays */}
             <TerminalOverlay
@@ -195,7 +169,13 @@ const App = () => {
                 archive={archive}
             />
 
-            <Navigation setView={handleNav} cartCount={cart.length} currentView={view} />
+            <Navigation 
+                setView={handleNav} 
+                cartCount={cart.length} 
+                currentView={view} 
+                isDark={isDark}
+                toggleDarkMode={toggleDarkMode}
+            />
 
             <main className="flex-grow relative z-10">
                 {view === 'HOME' && <HomeView setView={setView} />}
@@ -213,13 +193,13 @@ const App = () => {
               removeFromCart={removeFromCart}
             />
 
-            <footer className="bg-stone-900 text-stone-400 py-12 px-4 mt-12 border-t-4 border-stone-500 relative z-20">
+            <footer className="bg-stone-900 text-stone-400 py-12 px-4 mt-12 border-t-4 border-stone-500 dark:border-stone-700 relative z-20">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
                     <div>
                         <h4 className="text-white font-bold text-sm mb-4 flex items-center gap-2"><Box size={14} /> HOMESTEADER_LABS</h4>
                         <p>RELAY STATION: WATERFORD, CT</p>
                         <p>SECTOR: 7G</p>
-                        <p className="mt-4 text-stone-500">// ALL DESIGNS OPEN SOURCE WHERE APPLICABLE.</p>
+                        <p className="mt-4 text-stone-500 dark:text-stone-600">// ALL DESIGNS OPEN SOURCE WHERE APPLICABLE.</p>
                     </div>
                     <div>
                         <h5 className="text-white font-bold mb-4 uppercase">Direct_Link</h5>
@@ -236,7 +216,7 @@ const App = () => {
                                     isOpen: true,
                                     title: 'TERMS_OF_FABRICATION',
                                     content: '>> AGREEMENT PROTOCOL V.1.0\n\n1. RISK ACKNOWLEDGMENT\nBy accessing this terminal and utilizing Homesteader Labs fabrication files, you acknowledge that all hardware is experimental. We are not responsible for structural failure, limb loss, or voided insurance policies.\n\n2. MODIFICATION\nYou are encouraged to modify, hack, and improve all designs. Closed systems are dead systems.\n\n3. LIABILITY\nHomesteader Labs exists in the gray zones. If you build it, you own the consequences.'
-                                })} 
+                                })}
                                 className="hover:text-white cursor-pointer"
                             >
                                 TERMS_OF_FABRICATION
@@ -263,9 +243,9 @@ const App = () => {
                             </li>
                         </ul>
                     </div>
-                    <div className="border border-stone-700 p-4">
+                    <div className="border border-stone-700 dark:border-stone-800 p-4">
                         <p className="mb-2 text-stone-500 uppercase text-[10px]">Data_Feed_Subscription</p>
-                        <div className="flex bg-stone-800 border border-stone-600">
+                        <div className="flex bg-stone-800 dark:bg-black border border-stone-600 dark:border-stone-800">
                             <input
                                 type="email"
                                 placeholder="USER@NET.LOC"
@@ -281,7 +261,7 @@ const App = () => {
                                     subStatus === 'LOADING' ? 'bg-stone-600' :
                                     subStatus === 'SUCCESS' ? 'bg-green-700' :
                                     subStatus === 'ERROR' ? 'bg-red-700' :
-                                    'hover:bg-stone-700'
+                                    'hover:bg-stone-700 dark:hover:bg-stone-800'
                                 }`}
                             >
                                 {subStatus === 'LOADING' ? '...' :
@@ -298,7 +278,7 @@ const App = () => {
                         )}
                     </div>
                 </div>
-                <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-stone-800 text-center text-[10px] tracking-widest uppercase text-stone-600">
+                <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-stone-800 dark:border-stone-900 text-center text-[10px] tracking-widest uppercase text-stone-600">
                     © 2026 Homesteader Labs // Know your nature
                 </div>
             </footer>
