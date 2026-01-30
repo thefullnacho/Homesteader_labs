@@ -155,7 +155,7 @@ const App = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#e8e6e1] dark:bg-[#1c1917] text-stone-900 dark:text-[#e8e6e1] font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden transition-colors duration-300">
+        <div className="min-h-screen bg-[var(--bg-primary)] text-stone-900 dark:text-[#e8e6e1] font-mono selection:bg-stone-900 selection:text-white flex flex-col relative overflow-x-hidden transition-colors duration-300">
             {booting && <BootSequence onComplete={() => setBooting(false)} />}
 
             {!isDark && <BioMonitor />}
