@@ -2,8 +2,8 @@ import React from 'react';
 
 const HomeView = ({ setView }) => {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 text-center">
-            <div className="max-w-5xl w-full border-2 border-theme-main p-8 md:p-20 bg-theme-main/90 backdrop-blur-sm shadow-brutalist-lg relative">
+        <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 text-center pt-12 md:pt-0">
+            <div className="max-w-5xl w-full border-2 border-theme-main p-8 md:p-20 bg-theme-main/90 backdrop-blur-sm shadow-brutalist-lg relative mt-8 md:mt-0">
                 {/* Decorative Corners */}
                 <div className="absolute top-0 left-0 w-4 h-4 border-l-4 border-t-4 border-theme-main"></div>
                 <div className="absolute top-0 right-0 w-4 h-4 border-r-4 border-t-4 border-theme-main"></div>
@@ -18,8 +18,8 @@ const HomeView = ({ setView }) => {
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                 </div>
 
-                <h1 className="text-4xl md:text-8xl font-black tracking-tighter mb-8 leading-none text-theme-main">
-                    HOMESTEADER<br />LABS
+                <h1 className="text-3xl sm:text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-none text-theme-main whitespace-nowrap">
+                    HOMESTEADER LABS
                 </h1>
                 <div className="w-full h-px bg-theme-main opacity-20 my-6"></div>
                 <p className="text-sm md:text-base max-w-2xl mx-auto mb-10 text-theme-main opacity-80 uppercase tracking-wide">
