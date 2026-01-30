@@ -1,9 +1,9 @@
+/* Custom Homesteader overrides */
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Custom Homesteader overrides */
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -35,7 +35,7 @@ code {
 .border-stone-500 { border-color: #6b7280; }
 
 /* Shadows */
-.shadow-[12px_12px_0px_0px_rgba(28,25,23,1)] {
+.shadow-brutalist-lg {
   box-shadow: 12px 12px 0px 0px rgba(28,25,23,1);
 }
 

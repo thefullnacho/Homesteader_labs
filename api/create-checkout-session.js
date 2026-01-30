@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import crypto from 'crypto';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -18,6 +19,29 @@ export default async function handler(req, res) {
     const line_items = cart.map((item) => {
       // DYNAMIC CUSTOM PARTS: price_data for one-offs
       if (item.id === 'CUST_PART') {
+        // SECURITY: Verify signature to prevent price tampering
+        if (!item.signature || !item.material) {
+             throw new Error("Missing security signature for custom part.");
+        }
+
+        // Reconstruct payload: price (string format from toFixed(2)) + currency + material
+        // Note: item.price is number, we need the string "12.50" format used in signing.
+        // We trust the client sent the exact price value, but we verify it matches the signature.
+        // If client sends 12.5 (number) instead of "12.50", signature check might fail if not careful.
+        // upload-stl returned price as string "XX.XX". Client parsed to float.
+        // We should convert back to fixed(2) string for verification.
+        const priceString = item.price.toFixed(2);
+        const payload = `${priceString}:usd:${item.material}`;
+        
+        const expectedSignature = crypto
+            .createHmac('sha256', process.env.STRIPE_SECRET_KEY)
+            .update(payload)
+            .digest('hex');
+
+        if (item.signature !== expectedSignature) {
+            throw new Error("Security verification failed: Price mismatch.");
+        }
+
         return {
           quantity: item.quantity || 1,
           price_data: {
