@@ -96,9 +96,14 @@ const App = () => {
     useEffect(() => {
         const handleKeyDown = (e) => {
             // Toggle Terminal
-            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 't') {
+            if (e.altKey && e.key.toLowerCase() === 't') {
                 e.preventDefault();
                 setIsTerminalOpen(prev => !prev);
+            }
+
+            // Close Terminal
+            if (e.key === 'Escape') {
+                setIsTerminalOpen(false);
             }
 
             // Secret Code Buffer
@@ -165,23 +170,23 @@ const App = () => {
               removeFromCart={removeFromCart}
             />
 
-            <footer className="bg-stone-900 text-stone-400 py-12 px-4 mt-12 border-t-4 border-stone-500 dark:border-stone-700 relative z-20">
+            <footer className="bg-[var(--bg-secondary)] text-theme-sub py-12 px-4 mt-12 border-t-4 border-[var(--accent)] relative z-20">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
                     <div>
-                        <h4 className="text-white font-bold text-sm mb-4 flex items-center gap-2"><Box size={14} /> HOMESTEADER_LABS</h4>
+                        <h4 className="text-theme-main font-bold text-sm mb-4 flex items-center gap-2"><Box size={14} /> HOMESTEADER_LABS</h4>
                         <p>RELAY STATION: WATERFORD, CT</p>
                         <p>SECTOR: 7G</p>
-                        <p className="mt-4 text-stone-500 dark:text-stone-600">// ALL DESIGNS OPEN SOURCE WHERE APPLICABLE.</p>
+                        <p className="mt-4 text-theme-sub opacity-50">// ALL DESIGNS OPEN SOURCE WHERE APPLICABLE.</p>
                     </div>
                     <div>
-                        <h5 className="text-white font-bold mb-4 uppercase">Direct_Link</h5>
+                        <h5 className="text-theme-main font-bold mb-4 uppercase">Direct_Link</h5>
                         <ul className="space-y-2">
-                            <li><button onClick={() => { setView('SHOP'); window.scrollTo(0, 0); }} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ HARDWARE ]</button></li>
-                            <li><button onClick={() => { setView('MANIFESTO'); window.scrollTo(0, 0); }} className="hover:text-white hover:underline decoration-1 underline-offset-4">[ MANIFESTO ]</button></li>
+                            <li><button onClick={() => { setView('SHOP'); window.scrollTo(0, 0); }} className="hover:text-[var(--accent)] hover:underline decoration-1 underline-offset-4">[ HARDWARE ]</button></li>
+                            <li><button onClick={() => { setView('MANIFESTO'); window.scrollTo(0, 0); }} className="hover:text-[var(--accent)] hover:underline decoration-1 underline-offset-4">[ MANIFESTO ]</button></li>
                         </ul>
                     </div>
                     <div>
-                        <h5 className="text-white font-bold mb-4 uppercase">Protocol</h5>
+                        <h5 className="text-theme-main font-bold mb-4 uppercase">Protocol</h5>
                         <ul className="space-y-2">
                             <li
                                 onClick={() => setLegalModal({
@@ -189,7 +194,7 @@ const App = () => {
                                     title: 'TERMS_OF_FABRICATION',
                                     content: '>> AGREEMENT PROTOCOL V.1.0\n\n1. RISK ACKNOWLEDGMENT\nBy accessing this terminal and utilizing Homesteader Labs fabrication files, you acknowledge that all hardware is experimental. We are not responsible for structural failure, limb loss, or voided insurance policies.\n\n2. MODIFICATION\nYou are encouraged to modify, hack, and improve all designs. Closed systems are dead systems.\n\n3. LIABILITY\nHomesteader Labs exists in the gray zones. If you build it, you own the consequences.'
                                 })}
-                                className="hover:text-white cursor-pointer"
+                                className="hover:text-[var(--accent)] cursor-pointer"
                             >
                                 TERMS_OF_FABRICATION
                             </li>
@@ -199,7 +204,7 @@ const App = () => {
                                     title: 'WARRANTY (VOID)',
                                     content: '>> WARRANTY STATUS: VOID\n\nAll warranties were voided the moment you decided to take production into your own hands.\n\nThere is no customer support. There is only the community and the documentation.\n\nIf it breaks, fix it. If it doesn\'t work, iterate.'
                                 })}
-                                className="hover:text-white cursor-pointer"
+                                className="hover:text-[var(--accent)] cursor-pointer"
                             >
                                 WARRANTY (VOID)
                             </li>
@@ -209,7 +214,7 @@ const App = () => {
                                     title: 'PRIVACY_HASH',
                                     content: '>> PRIVACY PROTOCOL\n\nWE DO NOT TRACK YOU.\nTHE NETWORK DOES.\n\nHomesteader Labs stores no cookies other than essential session data (cart, boot state). We do not sell your data because we do not collect it.\n\nStay safe out there.'
                                 })}
-                                className="hover:text-white cursor-pointer"
+                                className="hover:text-[var(--accent)] cursor-pointer"
                             >
                                 PRIVACY_HASH
                             </li>
@@ -217,7 +222,7 @@ const App = () => {
                     </div>
                     <Newsletter />
                 </div>
-                <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-stone-800 dark:border-stone-900 text-center text-[10px] tracking-widest uppercase text-stone-600">
+                <div className="max-w-7xl mx-auto mt-12 pt-4 border-t border-theme-main opacity-30 text-center text-[10px] tracking-widest uppercase text-theme-sub">
                     © 2026 Homesteader Labs // Know your nature
                 </div>
             </footer>

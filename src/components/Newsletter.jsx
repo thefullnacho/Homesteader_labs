@@ -32,25 +32,25 @@ const Newsletter = () => {
     };
 
     return (
-        <div className="border border-stone-700 dark:border-stone-800 p-4">
-            <p className="mb-2 text-stone-500 uppercase text-[10px]">Data_Feed_Subscription</p>
-            <div className="flex bg-stone-800 dark:bg-black border border-stone-600 dark:border-stone-800">
+        <div className="border border-theme-main opacity-60 p-4">
+            <p className="mb-2 text-theme-sub uppercase text-[10px]">Data_Feed_Subscription</p>
+            <div className="flex bg-theme-sub border border-theme-main">
                 <input
                     type="email"
                     placeholder="USER@NET.LOC"
                     value={subEmail}
                     onChange={(e) => setSubEmail(e.target.value)}
-                    className="bg-transparent w-full p-2 text-white outline-none placeholder:text-stone-600 font-mono text-xs"
+                    className="bg-transparent w-full p-2 text-theme-main outline-none placeholder:text-theme-sub/40 font-mono text-xs"
                     disabled={subStatus === 'LOADING'}
                 />
                 <button
                     onClick={handleSubscribe}
                     disabled={subStatus === 'LOADING' || !subEmail || !subEmail.includes('@')}
-                    className={`px-3 text-white ${ 
-                        subStatus === 'LOADING' ? 'bg-stone-600' :
-                        subStatus === 'SUCCESS' ? 'bg-green-700' :
+                    className={`px-3 text-white transition-all ${ 
+                        subStatus === 'LOADING' ? 'bg-theme-sub' :
+                        subStatus === 'SUCCESS' ? 'bg-[var(--accent)] opacity-80' :
                         subStatus === 'ERROR' ? 'bg-red-700' :
-                        'hover:bg-stone-700 dark:hover:bg-stone-800'
+                        'hover:bg-[var(--accent)]'
                     }`}
                 >
                     {subStatus === 'LOADING' ? '...' :
@@ -60,7 +60,7 @@ const Newsletter = () => {
                 </button>
             </div>
             {subStatus === 'SUCCESS' && (
-                <p className="mt-2 text-green-400 text-[10px] font-mono">SUBSCRIPTION CONFIRMED</p>
+                <p className="mt-2 text-[var(--accent)] text-[10px] font-mono">SUBSCRIPTION CONFIRMED</p>
             )}
             {subStatus === 'ERROR' && (
                 <p className="mt-2 text-red-400 text-[10px] font-mono">TRANSMISSION FAILED</p>

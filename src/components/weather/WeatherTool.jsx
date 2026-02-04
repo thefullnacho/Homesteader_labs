@@ -231,9 +231,9 @@ const WeatherTool = () => {
   };
 
   return (
-    <div className="text-stone-900 font-mono p-2 sm:p-4 md:p-8 flex flex-col items-center">
+    <div className="text-theme-main font-mono p-2 sm:p-4 md:p-8 flex flex-col items-center">
       
-      <div className="w-full max-w-5xl bg-white/90 backdrop-blur-sm border-2 border-stone-900 shadow-[8px_8px_0px_0px_rgba(28,25,23,1)]">
+      <div className="w-full max-w-5xl bg-theme-main/90 backdrop-blur-sm brutalist-block">
         
         <Header 
           searchInput={searchInput}
@@ -258,7 +258,7 @@ const WeatherTool = () => {
         <StatusBar loading={loading} error={error} />
 
         {error && (
-            <div className="bg-red-600 text-white p-6 border-b-2 border-stone-900">
+            <div className="bg-red-900/80 text-white p-6 border-b-2 border-theme-main">
                 <h2 className="text-4xl font-bold mb-2">CRITICAL ERROR</h2>
                 <p className="text-xl">{error}</p>
             </div>
@@ -268,7 +268,7 @@ const WeatherTool = () => {
         {!loading && weatherData && !error && (
           <div className="flex flex-col">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 border-b-2 border-stone-900">
+            <div className="grid grid-cols-1 md:grid-cols-2 border-b-2 border-theme-main">
               <CurrentWeather weatherData={weatherData} WeatherCodeMap={WeatherCodeMap} />
               <WeatherDetails weatherData={weatherData} />
             </div>

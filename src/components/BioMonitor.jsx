@@ -31,7 +31,7 @@ const BioMonitor = () => {
         const draw = () => {
             time += 0.005;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = 'rgba(40, 40, 35, 0.08)';
+            ctx.strokeStyle = 'rgba(163, 193, 173, 0.1)';
             ctx.lineWidth = 1.5;
 
             const centerX = canvas.width / 2;

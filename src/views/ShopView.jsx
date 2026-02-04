@@ -3,10 +3,16 @@ import ProductCard from '../components/ProductCard';
 
 const ShopView = ({ products, addToCart }) => {
     return (
-        <div className="max-w-7xl mx-auto p-4 md:p-8 relative z-10">
-            <div className="flex justify-between items-end mb-8 border-b-2 border-stone-900 pb-2 bg-white/50 dark:bg-stone-900/50 p-4">
+        <div className="max-w-7xl mx-auto p-4 md:p-8 relative z-10 text-theme-main">
+            <div className="flex justify-between items-end mb-8 border-b-2 border-theme-main pb-2 bg-theme-sub/50 p-4 relative">
                 <h2 className="text-2xl font-bold uppercase">Hardware_Index</h2>
-                <div className="text-[10px] text-stone-500 text-right">
+                
+                {/* Marginalia Note */}
+                <div className="marginalia hidden md:block" style={{ top: '-30px', left: '200px', transform: 'rotate(-1deg)' }}>
+                    V0.4 battery dies in 20 mins at these temps. Need better insulation.
+                </div>
+
+                <div className="text-[10px] text-theme-sub text-right">
                     <p>DATABASE_V.4.2</p>
                     <p>RECORDS_FOUND: {products.length}</p>
                 </div>

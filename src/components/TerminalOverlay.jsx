@@ -113,8 +113,8 @@ ${editorData.content}
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[200] bg-black/95 text-green-500 font-mono text-xs md:text-sm p-4 md:p-8 flex flex-col font-bold" onClick={() => mode === 'TERMINAL' && inputRef.current?.focus()}>
-            <div className="flex justify-between border-b border-green-800 pb-2 mb-4">
+        <div className="fixed inset-0 z-[200] bg-[#1b2612]/98 text-theme-main font-mono text-xs md:text-sm p-4 md:p-8 flex flex-col font-bold" onClick={() => mode === 'TERMINAL' && inputRef.current?.focus()}>
+            <div className="flex justify-between border-b border-theme-main/30 pb-2 mb-4">
                 <span>{mode === 'EDITOR' ? 'FIELD_RECORDER_ACTIVE' : 'TERMINAL_SESSION_ACTIVE'}</span>
                 <span className="cursor-pointer hover:text-white" onClick={onClose}>[X] TERMINATE</span>
             </div>
@@ -125,7 +125,7 @@ ${editorData.content}
                         {history.map((line, i) => <div key={i}>{line}</div>)}
                         <div ref={bottomRef} />
                     </div>
-                    <div className="flex items-center gap-2 mt-4 border-t border-green-800 pt-4">
+                    <div className="flex items-center gap-2 mt-4 border-t border-theme-main/30 pt-4">
                         <span>user@homesteader:~</span>
                         <input
                             ref={inputRef}
@@ -133,19 +133,19 @@ ${editorData.content}
                             value={input}
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={handleCommand}
-                            className="bg-transparent outline-none flex-grow text-white caret-green-500"
+                            className="bg-transparent outline-none flex-grow text-white caret-[var(--accent)]"
                             autoFocus
                         />
                     </div>
                 </>
             ) : (
-                <div className="flex-grow flex flex-col gap-4 text-green-400">
+                <div className="flex-grow flex flex-col gap-4 text-theme-main">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-[10px] text-green-800 mb-1">TITLE</label>
+                            <label className="block text-[10px] text-theme-sub mb-1">TITLE</label>
                             <input
                                 type="text"
-                                className="w-full bg-stone-900 border border-green-800 p-2 text-white outline-none focus:border-green-500"
+                                className="w-full bg-[#24331a] border border-theme-main/30 p-2 text-white outline-none focus:border-[var(--accent)]"
                                 value={editorData.title}
                                 onChange={e => setEditorData({ ...editorData, title: e.target.value })}
                                 placeholder="ENTER_TITLE"
@@ -153,43 +153,43 @@ ${editorData.content}
                             />
                         </div>
                         <div>
-                            <label className="block text-[10px] text-green-800 mb-1">DATE (YYYY-MM-DD)</label>
+                            <label className="block text-[10px] text-theme-sub mb-1">DATE (YYYY-MM-DD)</label>
                             <input
                                 type="text"
-                                className="w-full bg-stone-900 border border-green-800 p-2 text-white outline-none focus:border-green-500"
+                                className="w-full bg-[#24331a] border border-theme-main/30 p-2 text-white outline-none focus:border-[var(--accent)]"
                                 value={editorData.date}
                                 onChange={e => setEditorData({ ...editorData, date: e.target.value })}
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-[10px] text-green-800 mb-1">TAGS (COMMA SEPARATED)</label>
+                        <label className="block text-[10px] text-theme-sub mb-1">TAGS (COMMA SEPARATED)</label>
                         <input
                             type="text"
-                            className="w-full bg-stone-900 border border-green-800 p-2 text-white outline-none focus:border-green-500"
+                            className="w-full bg-[#24331a] border border-theme-main/30 p-2 text-white outline-none focus:border-[var(--accent)]"
                             value={editorData.tags}
                             onChange={e => setEditorData({ ...editorData, tags: e.target.value })}
                         />
                     </div>
                     <div className="flex-grow flex flex-col">
-                         <label className="block text-[10px] text-green-800 mb-1">CONTENT (MARKDOWN SUPPORTED)</label>
+                         <label className="block text-[10px] text-theme-sub mb-1">CONTENT (MARKDOWN SUPPORTED)</label>
                         <textarea
-                            className="flex-grow w-full bg-stone-900 border border-green-800 p-4 text-white outline-none resize-none focus:border-green-500 font-mono"
+                            className="flex-grow w-full bg-[#24331a] border border-theme-main/30 p-4 text-white outline-none resize-none focus:border-[var(--accent)] font-mono"
                             value={editorData.content}
                             onChange={e => setEditorData({ ...editorData, content: e.target.value })}
                             placeholder="BEGIN TRANSMISSION..."
                         />
                     </div>
-                    <div className="flex justify-end gap-4 border-t border-green-800 pt-4">
+                    <div className="flex justify-end gap-4 border-t border-theme-main/30 pt-4">
                         <button
                             onClick={() => setMode('TERMINAL')}
-                            className="px-4 py-2 border border-green-800 text-green-800 hover:text-white hover:border-white"
+                            className="px-4 py-2 border border-theme-main/30 text-theme-sub hover:text-white hover:border-white"
                         >
                             [ CANCEL ]
                         </button>
                         <button
                             onClick={handleSaveLog}
-                            className="px-4 py-2 bg-green-900 text-white hover:bg-green-700"
+                            className="px-4 py-2 bg-[var(--accent)] text-white hover:brightness-110"
                         >
                             [ ENCRYPT & EXPORT ]
                         </button>

@@ -28,27 +28,27 @@ const Navigation = ({ setView, cartCount, currentView, isDark, toggleDarkMode, t
                     onClick={() => { setView('HOME'); handleLogoTouch(); }}
                     className="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2 group select-none"
                 >
-                    <div className="w-8 h-8 bg-stone-900 text-white flex items-center justify-center group-hover:invert transition-all">
+                    <div className="w-8 h-8 bg-[var(--accent)] text-white flex items-center justify-center group-hover:invert transition-all">
                         <Box size={20} />
                     </div>
                     <span className="hidden sm:inline">HOMESTEADER_LABS</span>
                     <span className="sm:hidden">HL_SYS</span>
                 </div>
 
-                <div className="hidden md:flex gap-8 text-sm items-center">
+                <div className="hidden md:flex gap-6 text-sm items-center">
                     {['SHOP', 'ARCHIVE', 'FABRICATION', 'WEATHER'].map((item) => (
                         <button
                             key={item}
                             onClick={() => setView(item)}
-                            className={`hover:bg-stone-900 hover:text-white px-2 py-1 transition-colors uppercase ${currentView === item ? 'bg-stone-900 text-white' : ''}`}
+                            className={`dymo-label ${currentView === item ? 'brightness-150 border-[var(--accent)]' : 'opacity-80 hover:opacity-100'}`}
                         >
-                            {`[ ${item} ]`}
+                            {item}
                         </button>
                     ))}
                     
                     <button 
                         onClick={(e) => { e.preventDefault(); toggleDarkMode(); }}
-                        className="p-2 border border-theme-main hover:bg-stone-900 hover:text-white transition-all ml-4"
+                        className="p-2 border border-theme-main hover:bg-[var(--accent)] hover:text-white transition-all ml-4"
                         title="TOGGLE_THEME"
                     >
                         {isDark ? <Sun size={16} /> : <Moon size={16} />}
@@ -58,7 +58,7 @@ const Navigation = ({ setView, cartCount, currentView, isDark, toggleDarkMode, t
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setView('CART')}
-                        className="flex items-center gap-2 border border-theme-main px-3 py-1 hover:bg-stone-900 hover:text-white transition-colors"
+                        className="flex items-center gap-2 border border-theme-main px-3 py-1 hover:bg-[var(--accent)] hover:text-white transition-colors"
                     >
                         <span className="text-xs">CART:</span>
                         <span className="font-bold">{cartCount.toString().padStart(2, '0')}</span>

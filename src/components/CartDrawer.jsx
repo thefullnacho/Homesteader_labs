@@ -49,29 +49,29 @@ const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
 
     return (
         <div
-            className="fixed inset-0 z-[60] flex justify-end bg-stone-900/20 dark:bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] flex justify-end bg-black/40 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
         >
             <div
-                className="w-full max-w-md bg-[#e8e6e1] dark:bg-[#1c1917] h-full shadow-2xl flex flex-col border-l-2 border-stone-900 dark:border-stone-700 font-mono transition-colors duration-300"
+                className="w-full max-w-md bg-[var(--bg-primary)] h-full shadow-2xl flex flex-col border-l-2 border-theme-main font-mono transition-colors duration-300"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="p-4 border-b border-stone-900 dark:border-stone-700 flex justify-between items-center bg-stone-900 dark:bg-stone-950 text-white">
+                <div className="p-4 border-b border-theme-main flex justify-between items-center bg-[var(--bg-secondary)] text-theme-main">
                     <h2 className="font-bold text-sm uppercase flex items-center gap-2">
                         <Terminal size={14} /> REQUISITION_LOG
                     </h2>
-                    <button onClick={() => setIsOpen(false)}><X size={18} /></button>
+                    <button onClick={() => setIsOpen(false)} className="hover:text-[var(--accent)]"><X size={18} /></button>
                 </div>
 
                 {/* Persistence Simulator */}
-                <div className="bg-stone-800 dark:bg-black text-xs text-stone-400 p-2 flex items-center gap-2 border-b border-stone-700 dark:border-stone-800">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div className="bg-[#1b2612] text-xs text-theme-sub p-2 flex items-center gap-2 border-b border-theme-main/10">
+                    <div className="w-2 h-2 bg-[var(--accent)] rounded-full animate-pulse"></div>
                     SYNCING TO OFFLINE NODE...
                 </div>
 
                 <div className="flex-grow overflow-y-auto p-4 space-y-4">
                     {cart.length === 0 ? (
-                        <div className="text-center text-stone-400 mt-20 flex flex-col items-center">
+                        <div className="text-center text-theme-sub mt-20 flex flex-col items-center">
                             <Wind className="w-12 h-12 mb-4 opacity-50" />
                             <p className="text-xs">BUFFER_EMPTY</p>
                         </div>
@@ -79,22 +79,22 @@ const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
                         cart.map((item, idx) => (
                             <div
                                 key={`${item.id}-${idx}`}
-                                className="bg-white dark:bg-stone-900 p-3 border border-stone-300 dark:border-stone-700 shadow-[2px_2px_0px_0px_rgba(28,25,23,0.5)] dark:shadow-none flex justify-between items-start"
+                                className="bg-theme-sub p-3 border border-theme-main/20 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] flex justify-between items-start"
                             >
                                 <div>
-                                    <p className="text-[10px] font-bold text-stone-400 dark:text-stone-500">{item.id}</p>
-                                    <h4 className="font-bold text-sm uppercase text-stone-900 dark:text-stone-100">{item.name}</h4>
+                                    <p className="text-[10px] font-bold text-theme-sub opacity-50">{item.id}</p>
+                                    <h4 className="font-bold text-sm uppercase text-theme-main">{item.name}</h4>
                                     <div className="flex gap-2 mt-1">
                                         {item.specs && item.specs.slice(0, 2).map(s => (
-                                            <span key={s} className="text-[9px] bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 px-1">{s}</span>
+                                            <span key={s} className="text-[9px] border border-theme-main/20 text-theme-sub px-1">{s}</span>
                                         ))}
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="font-bold text-sm text-stone-900 dark:text-stone-100">${item.price}</p>
+                                    <p className="font-bold text-sm text-theme-main">${item.price}</p>
                                     <button
                                         onClick={() => removeFromCart(idx)}
-                                        className="text-[10px] text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 px-1 mt-1 uppercase"
+                                        className="text-[10px] text-red-600 hover:bg-red-950/20 px-1 mt-1 uppercase"
                                     >
                                         [ DELETE ]
                                     </button>
@@ -104,17 +104,17 @@ const CartDrawer = ({ cart, isOpen, setIsOpen, removeFromCart }) => {
                     )}
                 </div>
 
-                <div className="p-6 border-t border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 space-y-4">
-                    <div className="flex justify-between items-end">
-                        <span className="text-xs text-stone-500 dark:text-stone-400">TOTAL_COST</span>
-                        <span className="text-2xl font-black text-stone-900 dark:text-white">${total}</span>
+                <div className="p-6 border-t border-theme-main bg-theme-sub space-y-4">
+                    <div className="flex justify-between items-end text-theme-main">
+                        <span className="text-xs opacity-60">TOTAL_COST</span>
+                        <span className="text-2xl font-black">${total}</span>
                     </div>
                     <button
                         onClick={handleSecureCheckout}
                         disabled={isCheckingOut || !cart.length}
-                        className="w-full bg-stone-900 dark:bg-stone-200 text-white dark:text-stone-900 font-bold py-4 hover:bg-stone-800 dark:hover:bg-stone-400 disabled:opacity-60 disabled:cursor-not-allowed flex justify-center gap-2 uppercase text-sm group"
+                        className="w-full bg-[var(--accent)] text-white font-bold py-4 hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed flex justify-center gap-2 uppercase text-sm group transition-all"
                     >
-                        <Zap size={16} className="group-hover:text-yellow-400 dark:group-hover:text-yellow-600 transition-colors" />
+                        <Zap size={16} className="group-hover:text-yellow-400 transition-colors" />
                         {isCheckingOut ? 'Processing...' : 'Secure_Checkout'}
                     </button>
                 </div>

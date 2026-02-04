@@ -4,15 +4,20 @@
 
 @theme {
   --dark-mode: class;
+  --color-theme-main: var(--text-primary);
+  --color-theme-bg: var(--bg-primary);
+  --color-theme-accent: var(--accent);
 }
 
 :root {
-  --bg-primary: #e8e6e1;
-  --bg-secondary: #f5f5f0;
-  --text-primary: #292524;
-  --text-secondary: #57534e;
-  --border-primary: #0f0f0f;
-  --shadow-color: rgba(28,25,23,1);
+  --bg-primary: #2d3336;
+  --bg-secondary: #373e42;
+  --text-primary: #EB860C;
+  --text-secondary: #7a8c7d;
+  --border-primary: #d35400;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --accent: #d35400;
+  --terminal-glow: rgba(163, 193, 173, 0.15);
 }
 
 .dark {
@@ -30,12 +35,41 @@
 
 body {
   margin: 0;
-  font-family: 'Inconsolata', 'Courier New', monospace;
+  font-family: 'Courier New', Courier, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.2s ease, color 0.2s ease;
+  line-height: 1.6;
+  position: relative;
+  image-rendering: crisp-edges; /* optional: sharper pixel feel */
+  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.4); /* subtle ink bleed on text */
+}
+
+/* Global Grit Overlay (Subtle Wear Layer) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: url('/textures/subtle-concrete-mildew.jpg') repeat;
+  opacity: 0.04;                 /* start very low, test 0.06–0.08 */
+  mix-blend-mode: multiply;
+  z-index: -1;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 9999;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 code {
@@ -49,11 +83,12 @@ code {
 .bg-theme-sub { background-color: var(--bg-secondary); }
 .border-theme-main { border-color: var(--border-primary); }
 
-/* Brutalist Block (Dark even in light mode) */
+/* Brutalist Block (Weathered Field Manual Style) */
 .brutalist-block {
-  background-color: #0f0f0f;
-  color: #e8e6e1;
-  border: 1px solid #0f0f0f;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: var(--border-weight, 2px) solid var(--border-primary);
+  box-shadow: 4px 4px 0px 0px var(--border-primary);
 }
 
 .dark .brutalist-block {
@@ -62,17 +97,17 @@ code {
 }
 
 /* Terminal green */
-.text-green-500 { color: #22c55e; }
-.text-green-600 { color: #16a34a; }
+.text-green-500 { color: #a3c1ad; } /* Using our theme's text-primary */
+.text-green-600 { color: #7a8c7d; }
 
 /* Shadows */
 .shadow-brutalist-lg {
-  box-shadow: 12px 12px 0px 0px var(--shadow-color);
+  box-shadow: 8px 8px 0px 0px var(--shadow-color);
 }
 
 /* Backdrop blur */
 .backdrop-blur-sm {
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
 }
 
 /* Animations */
@@ -86,9 +121,9 @@ code {
 }
 
 /* Hover states */
-.hover\:bg-stone-700:hover { background-color: #374151; }
+.hover\:bg-stone-700:hover { background-color: #d35400; }
 .hover\:bg-stone-100:hover { background-color: var(--bg-secondary); }
-.hover\:text-white:hover { color: #ffffff; }
+.hover\:text-white:hover { color: #1b2612; }
 .transition-all { transition: all 0.15s ease-in-out; }
 
 /* Lucide icons */
@@ -104,6 +139,115 @@ canvas {
 
 /* Selection */
 ::selection {
-  background-color: var(--text-primary);
-  color: var(--bg-primary);
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+/* Tactile Dymo Label Effect */
+.dymo-label {
+  background: #111;
+  color: #eee;
+  padding: 4px 12px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1), 2px 2px 4px rgba(0,0,0,0.5);
+  border: 1px solid #333;
+  display: inline-block;
+  font-size: 0.75rem;
+  transition: transform 0.1s ease;
+}
+
+.dymo-label:active {
+  transform: translateY(1px);
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.05), 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Heavy "Concrete" Border */
+.field-station-box {
+  padding: 2rem;
+  position: relative;
+  background: rgba(0,0,0,0.2);
+}
+
+.field-station-box::after {
+  content: "REF_07G";
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  background: var(--bg-secondary);
+  padding: 0 8px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-primary);
+  z-index: 30;
+}
+
+/* Marginalia Styling */
+.marginalia {
+  font-family: 'Caveat', cursive;
+  color: var(--accent);
+  font-size: 1.1rem;
+  position: absolute;
+  opacity: 0.9;
+  pointer-events: none;
+  line-height: 1.1;
+  transform: rotate(-2deg);
+  max-width: 150px;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+  z-index: 50;
+}
+
+/* The 'Condensation Sizzle' Glitch */
+@keyframes condensation-glitch {
+  0%, 100% { transform: translate(0); filter: blur(0) contrast(1); opacity: 1; }
+  1.5% { transform: translate(-3px, 2px); filter: blur(1.2px) contrast(1.6) hue-rotate(8deg); }
+  3%   { transform: translate(4px, -3px); filter: blur(0.8px); }
+  4.5% { transform: translate(-1px, 1px); filter: contrast(1.3); }
+  6%   { transform: translate(0); opacity: 0.92; }
+}
+
+@keyframes scan-flash {
+  0% { opacity: 0; top: 0; }
+  1% { opacity: 0.3; top: 50%; } /* The flash of a short circuit */
+  2% { opacity: 0; top: 100%; }
+  100% { opacity: 0; top: 100%; }
+}
+
+@keyframes drip {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.terminal-container {
+  animation: condensation-glitch 28s infinite ease-in-out;
+  position: relative;
+  overflow: hidden; /* Ensure flash doesn't spill out */
+}
+
+/* Add dripping condensation effect (SVG or pseudo) */
+.terminal-container::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 100%;
+  background: linear-gradient(transparent, rgba(163,193,173,0.08) 20%, transparent 40%);
+  animation: drip 18s linear infinite;
+  pointer-events: none;
+}
+
+/* Horizontal 'Short-Circuit' line */
+.terminal-container::before {
+  content: "";
+  position: absolute;
+  top: 0; /* Animated by scan-flash */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  opacity: 0;
+  z-index: 20;
+  pointer-events: none;
+  animation: scan-flash 35s infinite;
 }

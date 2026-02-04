@@ -32,8 +32,14 @@ const ArchiveView = ({ posts }) => {
 
     return (
         <div className="max-w-4xl mx-auto p-4 md:p-8 relative z-10 text-theme-main">
-            <div className="mb-8 border-l-4 border-theme-main pl-4 py-2">
+            <div className="mb-8 border-l-4 border-theme-main pl-4 py-2 relative">
                 <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none text-theme-main">Archive<br />_Log</h1>
+                
+                {/* Marginalia Note */}
+                <div className="marginalia hidden md:block" style={{ top: '10px', right: '0px', transform: 'rotate(2deg)', maxWidth: '200px' }}>
+                    Renovation paused. Rejuvenating soil from under 18 inches of white powder is... difficult.
+                </div>
+
                 <p className="text-xs mt-2 max-w-lg text-theme-sub uppercase">
                 // Accessing Homesteader Labs Public Research Terminal<br />
                 // All entries immutable
@@ -44,7 +50,7 @@ const ArchiveView = ({ posts }) => {
                     <div key={post.slug} className="group relative">
                         <div className="absolute -left-3 top-0 bottom-0 w-[1px] bg-theme-main opacity-20 group-hover:opacity-100 transition-opacity"></div>
                         <div className="flex items-center gap-3 mb-2">
-                            <span className="bg-stone-900 text-white text-[10px] px-1">{post.slug}</span>
+                            <span className="bg-[var(--accent)] text-white text-[10px] px-1">{post.slug}</span>
                             <span className="text-[10px] text-theme-sub">{post.date}</span>
                         </div>
                         <h3 className="font-bold text-xl mb-3 uppercase decoration-theme-main/30 underline decoration-1 underline-offset-4 text-theme-main">{post.title}</h3>
