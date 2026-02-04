@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Box } from 'lucide-react';
 import CartDrawer from './components/CartDrawer';
 import Manifesto from './components/Manifesto';
-import archiveData from '../public/data/archive.json';
 
 // Hooks
 import useCart from './hooks/useCart';
@@ -19,7 +18,6 @@ import Newsletter from './components/Newsletter';
 // Views
 import HomeView from './views/HomeView';
 import ShopView from './views/ShopView';
-import ArchiveView from './views/ArchiveView';
 import FabricationView from './views/FabricationView';
 import WeatherView from './views/WeatherView';
 
@@ -54,24 +52,6 @@ const App = () => {
 
     // Legal Modal State
     const [legalModal, setLegalModal] = useState({ isOpen: false, title: '', content: '' });
-
-    // Archive State (persisted)
-    const [archive, setArchive] = useState(() => {
-        try {
-            // Clear old archive data to force reload from MDX
-            localStorage.removeItem('hl_archive');
-            return archiveData;
-        } catch (e) {
-            return archiveData;
-        }
-    });
-
-    // Save Archive to LocalStorage
-    useEffect(() => {
-        try {
-            localStorage.setItem('hl_archive', JSON.stringify(archive));
-        } catch (e) { }
-    }, [archive]);
 
     // Load Products from JSON
     useEffect(() => {
@@ -142,7 +122,6 @@ const App = () => {
                 onClose={() => setIsTerminalOpen(false)}
                 cart={cart}
                 products={products}
-                archive={archive}
             />
 
             <Navigation 
@@ -157,7 +136,6 @@ const App = () => {
             <main className="flex-grow relative z-10">
                 {view === 'HOME' && <HomeView setView={setView} />}
                 {view === 'SHOP' && <ShopView products={products} addToCart={addToCart} />}
-                {view === 'ARCHIVE' && <ArchiveView posts={archive} />}
                 {view === 'FABRICATION' && <FabricationView addToCart={addToCart} />}
                 {view === 'WEATHER' && <WeatherView />}
                 {view === 'MANIFESTO' && <Manifesto />}

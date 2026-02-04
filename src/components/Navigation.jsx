@@ -36,7 +36,23 @@ const Navigation = ({ setView, cartCount, currentView, isDark, toggleDarkMode, t
                 </div>
 
                 <div className="hidden md:flex gap-6 text-sm items-center">
-                    {['SHOP', 'ARCHIVE', 'FABRICATION', 'WEATHER'].map((item) => (
+                    <button
+                        onClick={() => setView('SHOP')}
+                        className={`dymo-label ${currentView === 'SHOP' ? 'brightness-150 border-[var(--accent)]' : 'opacity-80 hover:opacity-100'}`}
+                    >
+                        SHOP
+                    </button>
+
+                    <a
+                        href="https://archive.homesteaderlabs.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="dymo-label opacity-80 hover:opacity-100 cursor-pointer"
+                    >
+                        ARCHIVE
+                    </a>
+
+                    {['FABRICATION', 'WEATHER'].map((item) => (
                         <button
                             key={item}
                             onClick={() => setView(item)}
@@ -73,7 +89,21 @@ const Navigation = ({ setView, cartCount, currentView, isDark, toggleDarkMode, t
                 </div>
             </div>
             <div className="md:hidden flex justify-around border-t border-theme-main py-2 bg-theme-sub text-xs">
-                {['SHOP', 'ARCHIVE', 'FABRICATION', 'WEATHER'].map((item) => (
+                <button
+                    onClick={() => setView('SHOP')}
+                    className={`${currentView === 'SHOP' ? 'text-theme-main underline decoration-2' : 'text-theme-sub'}`}
+                >
+                    SHOP
+                </button>
+                <a
+                    href="https://archive.homesteaderlabs.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-theme-sub hover:text-theme-main"
+                >
+                    ARCHIVE
+                </a>
+                {['FABRICATION', 'WEATHER'].map((item) => (
                     <button
                         key={item}
                         onClick={() => setView(item)}

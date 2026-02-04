@@ -13,7 +13,7 @@ const BootSequence = ({ onComplete }) => {
         { text: "ESTABLISHING SECURE CONNECTION...", delay: 1800 },
         { text: "PING: WATERFORD_NODE (12ms)", delay: 2000 },
         { text: "LOADING ASSETS: [####################] 100%", delay: 2400 },
-        { text: "DECRYPTING ARCHIVE LOGS...", delay: 2600 },
+        { text: "ESTABLISHING UPLINK TO ARCHIVE NODE...", delay: 2600 },
         { text: "STARTING BIOSYNTHESIS MONITOR...", delay: 2800 },
         { text: "SYSTEM READY.", delay: 3100 },
         { text: "EXECUTING GUI...", delay: 3400 },

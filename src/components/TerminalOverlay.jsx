@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
+const TerminalOverlay = ({ isOpen, onClose, cart, products }) => {
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
         'HOMESTEADER LABS TERMINAL ACCESS [v4.2.0]',
@@ -34,18 +34,14 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
                 case 'ls':
                     if (args[1] === '/shop' || !args[1]) {
                         response = `DIR /SHOP:\n${products.map(p => `${p.id}  <${p.category}>`).join('\n')}`;
-                    } else if (args[1] === '/archive') {
-                        response = `DIR /ARCHIVE:\n${archive.map(p => `${p.id}  [${p.date}]`).join('\n')}`;
                     } else {
-                        response = 'DIRECTORIES: /shop, /archive, /sys';
+                        response = 'DIRECTORIES: /shop, /sys';
                     }
                     break;
                 case 'cat':
                     const id = args[1]?.toUpperCase();
                     const prod = products.find(p => p.id === id);
-                    const post = archive.find(p => p.id === id);
                     if (prod) response = `READING ${id}...\nNAME: ${prod.name}\nPRICE: $${prod.price}\nDESC: ${prod.description}`;
-                    else if (post) response = `READING ${id}...\nDATE: ${post.date}\nTITLE: ${post.title}\nCONTENT: ${post.content}`;
                     else response = `ERR: FILE ${id} NOT FOUND`;
                     break;
                 case 'write':
@@ -84,7 +80,7 @@ const TerminalOverlay = ({ isOpen, onClose, cart, products, archive }) => {
 
     const handleSaveLog = () => {
         const slug = editorData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const filename = `log-${archive.length + 101}-${slug}.mdx`; // Rough auto-increment
+        const filename = `log-${Date.now()}-${slug}.mdx`; // Timestamp based filename
 
         const fileContent = `---
 title: "${editorData.title}"
@@ -106,7 +102,7 @@ ${editorData.content}
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        setHistory(prev => [...prev, `FILE SAVED: ${filename}`, 'UPLOAD MANUALLY TO /content/logs/', ' ']);
+        setHistory(prev => [...prev, `FILE SAVED: ${filename}`, 'LOCAL STORAGE SUCCESSFUL', ' ']);
         setMode('TERMINAL');
     };
 

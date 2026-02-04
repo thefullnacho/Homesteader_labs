@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node scripts/build-archive.js && vite",
-    "build": "node scripts/build-archive.js && vite build",
-    "preview": "vite preview",
-    "build-archive": "node scripts/build-archive.js"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@stripe/stripe-js": "^8.5.3",
