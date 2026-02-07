@@ -19,7 +19,7 @@ const DailyForecast = ({ dailyData, WeatherCodeMap, unit }) => {
                     p-4 border-stone-900 border-b-2 lg:border-b-0 lg:border-r-2
                     ${i === 3 || i === 7 ? 'lg:border-r-0' : ''}
                     ${i >= 4 ? 'lg:border-t-2' : ''}
-                    hover:bg-yellow-50 transition-colors flex flex-row lg:flex-col justify-between items-center lg:items-start h-24 lg:h-auto
+                    hover:bg-yellow-50 hover:text-contrast transition-colors flex flex-row lg:flex-col justify-between items-center lg:items-start h-24 lg:h-auto
                 `}>
                     <div className="text-left">
                         <span className="block text-xs font-bold text-stone-500 uppercase">{i === 0 ? "TODAY" : formatDate(day)}</span>

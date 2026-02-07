@@ -5,7 +5,7 @@ const AlertDetails = ({ alerts }) => {
   if (!alerts || alerts.length === 0) return null;
 
   return (
-    <div id="alert-details" className="mt-8 border-2 border-red-600 bg-red-50 p-6">
+    <div id="alert-details" className="mt-8 border-2 border-red-600 bg-red-50 p-6 text-contrast">
       <div className="bg-red-600 text-white px-4 py-2 text-xl font-black uppercase inline-block mb-4">
         ACTIVE ALERTS ({alerts.length})
       </div>

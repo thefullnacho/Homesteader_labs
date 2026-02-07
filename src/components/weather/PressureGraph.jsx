@@ -29,7 +29,7 @@ const PressureGraph = ({ hourly, unit }) => {
     }).join(' ');
 
     return (
-        <div className="border-b-2 border-stone-900 p-6 bg-white">
+        <div className="border-b-2 border-stone-900 p-6 bg-white text-contrast">
             <div className="flex justify-between items-end mb-4">
                  <h3 className="text-sm font-bold uppercase bg-stone-900 text-white inline-block px-2 py-1">
                     ATMOSPHERIC_PRESSURE (24H)

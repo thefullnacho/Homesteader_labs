@@ -30,7 +30,7 @@ export const WeatherCodeMap = {
 };
 
 export const formatDate = (isoString) => {
-  const d = new Date(isoString);
+  const d = new Date(isoString + 'T00:00:00');
   return `${d.getMonth() + 1}/${d.getDate()}`;
 };
 

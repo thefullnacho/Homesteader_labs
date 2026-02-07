@@ -24,7 +24,7 @@ const HourlyForecast = ({ hourlyData, unit, currentTime }) => {
   }
 
   return (
-    <div className="border-b-2 border-stone-900 overflow-hidden bg-stone-50">
+    <div className="border-b-2 border-stone-900 overflow-hidden bg-stone-50 text-contrast">
         <div className="bg-stone-900 text-white px-4 py-1 text-xs font-bold uppercase inline-block">
             HOURLY_TEMP (24H)
         </div>

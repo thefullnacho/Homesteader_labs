@@ -79,6 +79,7 @@ code {
 /* Custom Theme Utilities */
 .text-theme-main { color: var(--text-primary); }
 .text-theme-sub { color: var(--text-secondary); }
+.text-contrast { color: #333333; }
 .bg-theme-main { background-color: var(--bg-primary); }
 .bg-theme-sub { background-color: var(--bg-secondary); }
 .border-theme-main { border-color: var(--border-primary); }

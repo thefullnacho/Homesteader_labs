@@ -56,7 +56,7 @@ const SurvivalGuide = ({ weatherData, airQuality }) => {
   };
   
   return (
-    <div className="border-b-2 border-stone-900 bg-white grid grid-cols-1 md:grid-cols-3">
+    <div className="border-b-2 border-stone-900 bg-white text-contrast grid grid-cols-1 md:grid-cols-3">
         {/* SOLAR / LUNAR */}
         <div className="p-4 border-b-2 md:border-b-0 md:border-r-2 border-stone-900 flex flex-col justify-center">
             <h3 className="text-xs font-bold text-stone-500 uppercase mb-2 flex items-center gap-2">
